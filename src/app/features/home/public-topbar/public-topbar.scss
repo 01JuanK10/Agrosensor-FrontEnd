@@ -1,4 +1,4 @@
-.pl-5{
+.pl-5 {
     padding-left: 5% !important;
 }
 
@@ -8,4 +8,37 @@
 
 .bold-text {
     font-weight: 500;
+}
+
+.navbar {
+    padding: 10px 20px;
+    background-color: #f8f9fa; // gris claro
+
+    .navbar-brand {
+        font-weight: 600;
+        color: #2a2a2a;
+
+        span.bold-text {
+            color: #F59E0B; // naranja principal
+        }
+    }
+
+    .nav-link {
+        color: #2a2a2a;
+        font-weight: 500;
+
+        &:hover {
+            color: #F59E0B; // efecto hover naranja
+        }
+    }
+
+    .btn-primary {
+        background-color: #F59E0B; // color principal
+        border-color: #F59E0B;
+
+        &:hover {
+            background-color: #D97706; // variación más oscura
+            border-color: #D97706;
+        }
+    }
 }
