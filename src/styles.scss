@@ -89,8 +89,9 @@ $color-light: #FEFBEB; // Fondo claro / crema
 
 /* ===== Botón primario ===== */
 .btn-primary {
-  background-color: $color-accent;
-  border-color: #F59E0B;
+  background-color: $color-accent !important;
+  border-color: #F59E0B !important;
+  color: white !important;
   height: 40px;
 
   &:hover {
