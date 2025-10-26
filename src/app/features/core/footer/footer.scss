@@ -1,0 +1,74 @@
+@use 'sass:color';
+@use './../../../../styles.scss' as *;
+
+.app-footer {
+    background-color: $color-dark;
+    color: $color-light;
+    padding: 40px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+
+    .footer-logo img {
+        width: 70px;
+        height: auto;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    .footer-text {
+        max-width: 700px;
+        line-height: 1.6;
+        font-size: 1rem;
+        color: $color-light;
+        text-align: justify;
+    }
+
+    .footer-social {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+
+            img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1); // hace los íconos blancos si son oscuros
+            }
+
+            &:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+    }
+
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 15px;
+        font-size: 0.9rem;
+        // Reemplazo de lighten() por color.scale()
+        color: color.scale($color-dark, $lightness: 55%);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .app-footer {
+        padding: 30px 15px;
+        .footer-text {
+            font-size: 0.95rem;
+        }
+    }
+}

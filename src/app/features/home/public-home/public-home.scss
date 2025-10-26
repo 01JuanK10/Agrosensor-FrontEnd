@@ -1,71 +1,32 @@
-/* Contenedor principal que ocupa todo el ancho */
-.background-slider {
-  position: relative;
-  width: 100%;
-  height: 500px;
-  overflow: hidden;
+@use "./../../../../styles.scss";
+.grid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+    gap: 20px;
 }
 
-/* Cada slide (imagen de fondo + texto) */
-.slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 2s ease-in-out;
-  animation: fadeSlide 60s infinite; /* 30s por imagen */
+.information-card {
+    padding: 20px;
+    width: 100%;
+    justify-items: center;
 }
 
-/* Imagen 1 */
-.slide1 {
-  background-image: url('/assets/home/background1.webp'); /* Cambia la ruta */
-  animation-delay: 0s;
-}
-
-/* Imagen 2 */
-.slide2 {
-  background-image: url('/assets/home/background2.webp'); /* Cambia la ruta */
-  animation-delay: 27s;
-}
-
-/* Texto centrado en el medio del div */
-.text-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  text-align: center;
-  width: 80%;
-}
-
-.text-overlay h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-  margin: 0;
-}
-
-/* Animación para alternar entre imágenes */
-@keyframes fadeSlide {
-  0%, 45% {
-    opacity: 1;
-  }
-  50%, 95% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* Mejora para pantallas pequeñas */
-@media (max-width: 768px) {
-  .text-overlay h1 {
+.information-card h3 {
+    color: rgb(0, 0, 0);
     font-size: 1.5rem;
-  }
+    margin-bottom: 10px;
+}
+
+.information-card p {
+    color: rgb(80, 80, 80);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgb(0, 0, 0);
 }
