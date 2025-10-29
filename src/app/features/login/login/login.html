@@ -1,3 +1,54 @@
-<div class="text-center m-5">
-    <p>login works! bh</p>
+
+<div class="login-container">
+  <!-- Botón de cierre -->
+  <button class="close-btn" (click)="cerrarModal()">×</button>
+
+
+  <!-- Logo -->
+  <div class="login-logo">
+    <img src="assets/logo.png" alt="AgroSensor Logo" />
+  </div>
+
+  <!-- Título -->
+  <h2 class="login-title">Bienvenido</h2>
+  <p class="login-subtitle">Inicia sesión para ingresar a AgroSensor</p>
+
+  <!-- Formulario -->
+  <form class="login-form">
+    <div class="mb-3">
+      <label for="username" class="form-label">Nombre de Usuario*</label>
+      <input
+        type="text"
+        id="username"
+        class="form-control"
+        placeholder="Enter your username"
+        required
+      />
+    </div>
+
+    <div class="mb-3 position-relative">
+      <label for="password" class="form-label">Contraseña*</label>
+      <div class="input-group">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          id="password"
+          class="form-control"
+          placeholder="Enter your password"
+          required
+        />
+
+        <button
+          type="button"
+          mat-icon-button
+          tabindex="-1"
+          (click)="togglePasswordVisibility()"
+          aria-label="Toggle password visibility"
+        >
+          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+  </form>
 </div>

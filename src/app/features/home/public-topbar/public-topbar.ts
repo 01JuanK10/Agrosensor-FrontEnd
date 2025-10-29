@@ -13,26 +13,18 @@ import { Login } from '../../login/login/login';
 export class PublicTopbar {
 
   constructor(private _matDialog: MatDialog) {}
-  cantidadModalsAbiertos: number = 0;
+  
   abrirModal(): void {
-    if (this.cantidadModalsAbiertos > 0) {
-      this._matDialog.closeAll();
-      this.cantidadModalsAbiertos = 0;
-      return;
-    }
-    this._matDialog.open(Login, { 
-        width: '800px',
-        height: 'auto',
-        position: { top: '100px'},
-        exitAnimationDuration: '200ms',
-        disableClose: true
-      } 
-    );
-    this.cantidadModalsAbiertos++;
+    this._matDialog.open(Login, {
+      width: '90vw',          
+      maxWidth: '400px',      
+      height: 'auto',
+      maxHeight: '90vh',       
+      position: { top: '5vh' },
+      panelClass: 'responsive-login-modal',
+      exitAnimationDuration: '200ms',
+      disableClose: true
+    });
   }
 
-  cerrarModal(): void {
-    this._matDialog.closeAll();
-    this.cantidadModalsAbiertos = 0;
-  }
 }
