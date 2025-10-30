@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PublicTopbar } from '../public-topbar/public-topbar';
 import { HomeSlider } from '../home-slider/home-slider';
 import { Footer } from '../../core/footer/footer';
+import { AuthService } from '../../auth/service/auth-service';
 
 @Component({
   selector: 'app-public-home',
@@ -11,8 +12,10 @@ import { Footer } from '../../core/footer/footer';
 })
 export class PublicHome implements OnInit {
 
+  constructor(private auth: AuthService) { }
+
   ngOnInit(): void {
-    
+    this.auth.logout();
   }
 
 }
