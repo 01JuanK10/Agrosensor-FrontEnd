@@ -1,0 +1,19 @@
+$color-primary: #fbbe24; // Amarillo suave
+$color-accent: #F59E0B; // Naranja intenso
+$color-dark: #374151; // Gris oscuro / texto principal
+$color-light: #ffffff; // Fondo claro / crema
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background: $color-primary !important;
+  border-bottom: 1px solid darken($color-dark, 10%) !important;
+  position: relative;
+  z-index: 5;
+}
+
+h1, .mat-icon {
+  color: $color-dark !important;
+}

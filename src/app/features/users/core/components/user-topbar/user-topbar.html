@@ -1,0 +1,29 @@
+<mat-toolbar class="mat-elevation-z3">
+    <button matIconButton class="example-icon" matTooltip="Abrir menú" (click)="onMenuToggle()">
+    <mat-icon>menu</mat-icon>
+    </button>
+    <a routerLink="/inicio" style="display: flex; align-items: center; text-decoration: none;">
+        <img style="height: 40px; margin: 0px 8px; border-radius: 30%;" src="assets/dark-logo.png" alt="logo">
+        <h1 style="font-size: x-large; margin-top: 3px;">AgroSensor</h1>
+    </a>
+
+    <span class="example-spacer"></span>
+    
+    <button style="margin: 4px;" 
+            mat-icon-button 
+            class="example-icon favorite-icon" 
+            matTooltip="Cerrar sesión" 
+            (click)="exitApp()">
+    <mat-icon>logout</mat-icon>
+    </button>
+<!-- 
+    esto va en el boton de importar -> (click)="fileInput.click()"
+    <input #fileInput 
+        type="file" 
+        style="display: none;" 
+        (change)="importar($event)" />    
+-->
+
+
+
+</mat-toolbar>

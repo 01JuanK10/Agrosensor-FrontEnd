@@ -1,0 +1,32 @@
+<mat-sidenav-container>
+    <mat-sidenav #snav opened mode="side" [style.width]="sidenavWidth">
+        <div class ="sidenav-header" style="text-align: center;" >
+            <img src="assets/logo-github.svg" alt="no" [style.width]="profilePictureSize" [style.height]="profilePictureSize" style="margin: 20px 0px;">
+            <div class="header-text" style="margin: 20px 0px; color:  #F5F5DC;">
+                <h2 [style.display]="showText">{{ role }}</h2>
+                <p [style.display]="showText" style=" font-size: medium">{{ name }}</p>
+            </div>
+            <hr style="border: 1.25px solid  #374151; margin: 0 20px;">
+        </div>
+        <mat-nav-list>
+            @for (item of menuItems(); track $index) {
+                <a mat-list-item [routerLink]="(item.route)" 
+                routerLinkActive="active-link" 
+                >
+                    <mat-icon matListItemIcon> {{item.icon}} </mat-icon>
+                    <span matListItemTitle >{{item.label}}</span>
+                </a>  
+            }
+            <a mat-list-item>
+                <mat-icon matListItemIcon> analytics </mat-icon>
+                <span matListItemTitle > Reportes </span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content" [style.marginLeft]="sidenavWidth">
+        <router-outlet></router-outlet>
+        <p>client-panel works! and admin</p>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

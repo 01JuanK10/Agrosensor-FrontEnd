@@ -4,7 +4,7 @@
 .app-footer {
     background-color: $color-dark;
     color: $color-light;
-    padding: 40px 20px;
+    padding: 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -22,7 +22,7 @@
         line-height: 1.6;
         font-size: 1rem;
         color: $color-light;
-        text-align: justify;
+        text-align: center;
     }
 
     .footer-social {
