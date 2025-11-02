@@ -62,16 +62,50 @@ export class UserSidebar {
 
   }
   
-  menuItems = signal<MenuItem[]>([
+  menuItemsClient = signal<MenuItem[]>([
     {
       icon: 'person',
-      label: 'Clientes',
-      route: '/clientes'
+      label: 'Información Usuario',
+      route: 'usuario'
     },
     {
-      icon: 'agriculture',
-      label: 'Porcinos',
-      route: '/porcinos'
+      icon: 'map',
+      label: 'Mapa',
+      route: 'mapas'
+    },
+    {
+      icon: 'analytics',
+      label: 'Analíticas',
+      route: 'analiticas'
     }
   ]);
+
+  menuItemsAdmin = signal<MenuItem[]>([
+    {
+      icon: 'group',
+      label: 'Usuarios',
+      route: 'usuario'
+    },
+    {
+      icon: 'wifi_4_bar',
+      label: 'Dispositivos',
+      route: 'mapas'
+    },
+    {
+      icon: 'analytics',
+      label: 'Analíticas',
+      route: 'analiticas'
+    }
+  ]);
+
+  getMenuItemsByRole(): MenuItem[] {
+    const role = sessionStorage.getItem('user_role');
+    if (role === 'ADMIN') {
+      return this.menuItemsAdmin();
+    } else if (role === 'CLIENT') {
+      return this.menuItemsClient();
+    } else {
+      return [];
+    } 
+  }
 }
