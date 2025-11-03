@@ -4,6 +4,7 @@ import { authGuard } from './features/auth/guard/auth-guard';
 import { NotFound } from './features/core/not-found/not-found';
 import { AdminPanel } from './features/users/admin/components/admin-panel/admin-panel';
 import { ClientPanel } from './features/users/client/client-panel/client-panel';
+import { ErosionMap } from './features/users/client/erosion-map/erosion-map';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,9 +18,13 @@ export const routes: Routes = [
     },
     { path: 'client',
         data: { role: 'CLIENT' },
-        canActivateChild: [authGuard],
+//        canActivateChild: [authGuard],
         children: [
-            { path: 'client-panel', component: ClientPanel }
+            { path: 'client-panel', component: ClientPanel,
+                children: [
+                    { path: 'erosion-map', component: ErosionMap }
+                ]
+            }
         ]
     },
     {path: '**', component: NotFound }

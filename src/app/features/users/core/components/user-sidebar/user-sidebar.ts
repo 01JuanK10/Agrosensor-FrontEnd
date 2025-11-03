@@ -71,12 +71,12 @@ export class UserSidebar {
     {
       icon: 'map',
       label: 'Mapa',
-      route: 'mapas'
+      route: 'erosion-map'
     },
     {
       icon: 'analytics',
       label: 'Analíticas',
-      route: 'analiticas'
+      route: 'analytics'
     }
   ]);
 
