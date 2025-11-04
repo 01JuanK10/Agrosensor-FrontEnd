@@ -25,7 +25,11 @@ export class ErosionMap implements OnInit, AfterViewInit {
   private apiUrl = `${environment.apiUrl}/api/erosion-data`;
 
   ngOnInit(): void {
-    this.loadErosionData();
+    if (isPlatformBrowser(this.platformId)) {
+      const cedula = Number(localStorage.getItem('cedula'));
+      this.loadErosionData(cedula);
+    }
+    
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -49,8 +53,8 @@ export class ErosionMap implements OnInit, AfterViewInit {
     }
   }
 
-  private loadErosionData(): void {
-    this.http.get<ErosionPoint[]>(this.apiUrl).subscribe({
+  private loadErosionData(cedula: number): void {
+    this.http.get<ErosionPoint[]>(`${this.apiUrl}/${cedula}`).subscribe({
       next: async (data) => {
         this.erosionPoints = data;
         if (data.length > 0 && isPlatformBrowser(this.platformId)) {
