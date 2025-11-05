@@ -1,11 +1,7 @@
-
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
+@use 'sass:color';
 @use '@angular/material' as mat;
 
+/* ===== Angular Material Theme ===== */
 html {
   @include mat.theme((
     color: (
@@ -18,22 +14,92 @@ html {
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
 }
-/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* ===== Paleta de colores ===== */
+$color-primary: #FBBF24; // Amarillo suave
+$color-accent: #F59E0B; // Naranja intenso
+$color-dark: #374151; // Gris oscuro / texto principal
+$color-light: #FEFBEB; // Fondo claro / crema
+
+/* ===== Estilos de títulos ===== */
+.page-title-1 {
+  text-align: center;
+  font-size: 2.5rem; /* ~40px */
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: rgb(34, 34, 34);
+  letter-spacing: 0.5px;
+}
+
+.page-title-2 {
+  text-align: center;
+  font-size: 2rem; /* ~32px */
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: rgb(45, 45, 45);
+}
+
+.page-title-3 {
+  text-align: center;
+  font-size: 1.75rem; /* ~28px */
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: rgb(55, 55, 55);
+}
+
+.page-title-4 {
+  text-align: center;
+  font-size: 1.5rem; /* ~24px */
+  font-weight: 500;
+  margin-bottom: 18px;
+  color: rgb(65, 65, 65);
+}
+
+.page-title-5 {
+  text-align: center;
+  font-size: 1.25rem; /* ~20px */
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: rgb(75, 75, 75);
+}
+
+.page-title-6 {
+  text-align: center;
+  font-size: 1.1rem; /* ~18px */
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: rgb(90, 90, 90);
+}
+
+/* ===== Botón primario ===== */
+.btn-primary {
+  background-color: $color-accent !important;
+  border-color: #F59E0B !important;
+  color: white !important;
+  height: 40px;
+
+  &:hover {
+    background-color: color.scale($color-accent, $lightness: -5%);
+  }
+
+  &:disabled {
+    background-color: color.scale($color-accent, $lightness: 10%);
+    cursor: not-allowed;
+  }
+}

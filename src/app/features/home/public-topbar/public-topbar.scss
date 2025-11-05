@@ -1,0 +1,36 @@
+@use "./../../../../styles.scss";
+
+.nowrap-text {
+    white-space: nowrap;
+}
+
+.bold-text {
+    font-weight: 500;
+}
+
+.navbar {
+    padding: 15px 20px;
+    background-color: #ffffff;
+    
+    .navbar-brand {
+        font-weight: 600;
+        color: #2a2a2a;
+
+        span.bold-text {
+            color: #F59E0B; 
+        }
+    }
+
+    .nav-link {
+        color: #2a2a2a;
+        font-weight: 500;
+
+        &:hover {
+            color: #F59E0B;
+        }
+    }
+}
+
+.navbar.fixed-top {
+    z-index: 500 !important;
+}

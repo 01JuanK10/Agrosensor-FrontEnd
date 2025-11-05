@@ -1,0 +1,34 @@
+$color-primary: #fbbe24b2; // Amarillo suave
+$color-accent: #f59f0b; // Naranja intenso
+$color-dark: #374151; // Gris oscuro / texto principal
+$color-light: #ffffff; // Fondo claro / crema
+
+.content {
+  padding: 40px;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+mat-sidenav {
+  background: $color-primary !important; // Naranja intenso, contrasta bien con el topbar
+  border-radius: 0px;
+}
+
+span, .mat-icon {
+  color: $color-dark !important; // Mantiene legibilidad
+}
+h2, p{
+  color: $color-dark !important;
+}
+
+a {
+  margin-top: 10px;
+  color: $color-dark !important;
+  text-decoration: none;
+
+  &:hover {
+    color: lighten($color-light, 10%) !important;
+  }
+}
