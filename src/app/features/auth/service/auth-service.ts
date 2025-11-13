@@ -16,6 +16,7 @@ interface TokenResponse {
   role: string;
   name: string;
   expires_in?: number;
+  cc: number;
 }
 
 @Injectable({
@@ -25,6 +26,8 @@ export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly ROLE_KEY = 'user_role';
   private readonly USERNAME_KEY = 'name';
+  private readonly CC_KEY = 'cc';
+
   private isLoggedIn = false;
 
   private apiUrl = `${environment.apiUrl}/auth`;
@@ -42,6 +45,7 @@ export class AuthService {
           sessionStorage.setItem(this.TOKEN_KEY, res.access_token);
           sessionStorage.setItem(this.ROLE_KEY, res.role);
           sessionStorage.setItem(this.USERNAME_KEY, res.name);
+          sessionStorage.setItem(this.CC_KEY, res.cc.toString());
         }
         this.isLoggedIn = true;
           if (res.role === 'CLIENT') {
