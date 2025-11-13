@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
@@ -21,12 +21,13 @@ export class ErosionMap implements OnInit, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
 
   private map: any;
-  erosionPoints: ErosionPoint[] = [];
-  private apiUrl = `${environment.apiUrl}/api/erosion-data`;
+  erosionPoints = signal<ErosionPoint[]>([]);
+
+  private apiUrl = `${environment.apiUrl}/api/map/erosion-points`;
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const cedula = Number(localStorage.getItem('cedula'));
+      const cedula = Number(sessionStorage.getItem('cc'));
       this.loadErosionData(cedula);
     }
     
@@ -54,9 +55,13 @@ export class ErosionMap implements OnInit, AfterViewInit {
   }
 
   private loadErosionData(cedula: number): void {
-    this.http.get<ErosionPoint[]>(`${this.apiUrl}/${cedula}`).subscribe({
+    const token = sessionStorage.getItem('auth_token');
+    
+    this.http.get<ErosionPoint[]>(`${this.apiUrl}/${cedula}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
       next: async (data) => {
-        this.erosionPoints = data;
+        this.erosionPoints.set(data);
         if (data.length > 0 && isPlatformBrowser(this.platformId)) {
           const L = await import('leaflet');
           this.updateMap(L, data);
@@ -65,6 +70,7 @@ export class ErosionMap implements OnInit, AfterViewInit {
       error: (err) => console.error('Error fetching erosion data:', err),
     });
   }
+
 
   private updateMap(L: any, points: ErosionPoint[]): void {
     this.map.eachLayer((layer: any) => {
