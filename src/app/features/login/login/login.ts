@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../auth/service/auth-service';
+import { ResetPasswordForm } from '../../home/reset-password-form/reset-password-form';
 
 @Component({
   selector: 'app-login',
-  imports: [MatIconModule, MatButtonModule],
+  imports: [MatIconModule, MatButtonModule, MatDialogModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -15,7 +16,7 @@ export class Login {
   showPassword = false;
   authService = inject(AuthService);
 
-  constructor(public matDialogRef: MatDialogRef<Login>) {
+  constructor(public matDialogRef: MatDialogRef<Login>, private _matDialog: MatDialog) {
   }
 
   togglePasswordVisibility() {
@@ -50,6 +51,24 @@ export class Login {
         alert('Invalid credentials. Please try again.');
       }
     });
+  }
+
+  private abrirModal(): void {
+    this.cerrarModal();
+    this._matDialog.open(ResetPasswordForm, {
+      width: '90vw',          
+      maxWidth: '400px',      
+      height: 'auto',
+      maxHeight: '90vh',       
+      position: { top: '5vh' },
+      panelClass: 'responsive-login-modal',
+      exitAnimationDuration: '200ms',
+      disableClose: true
+    });
+  }
+
+  resetPassword(): void {
+    this.abrirModal();
   }
 
 }

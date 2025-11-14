@@ -86,6 +86,14 @@ $color-white: #fff;
   }
 }
 
+.btn-link{
+  color: #F59E0B;
+
+  &:hover {
+    color: darken(#F59E0B, 10%);
+  }
+}
+
 /* Animación de aparición */
 @keyframes fadeIn {
   from {
