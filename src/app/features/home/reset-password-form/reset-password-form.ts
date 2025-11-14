@@ -11,10 +11,18 @@ import { AuthService } from '../../auth/service/auth-service';
   styleUrl: './reset-password-form.scss',
 })
 export class ResetPasswordForm {
+
+  authService = inject(AuthService);
+
   constructor(public matDialogRef: MatDialogRef<ResetPasswordForm>) {
   }
   
-  cerrarModal(){
+  closeModal(){
+    this.matDialogRef.close();
+  }
+
+  resetPassword(){
+    alert('Password reset not implemented yet.');
     this.matDialogRef.close();
   }
 }
