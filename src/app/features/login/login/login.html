@@ -15,7 +15,7 @@
 
   <!-- Formulario -->
   <form class="login-form">
-    <div class="mb-3">
+    <div class="mb-2">
       <label for="username" class="form-label">Nombre de Usuario*</label>
       <input
         type="text"
@@ -26,7 +26,7 @@
       />
     </div>
 
-    <div class="mb-3 position-relative">
+    <div class="mb-2 position-relative">
       <label for="password" class="form-label">Contraseña*</label>
       <div class="input-group">
         <input
@@ -48,7 +48,9 @@
         </button>
       </div>
     </div>
-
+    <button type="button" class="btn btn-link mb-1" (click)="resetPassword()">
+      ¿Olvidaste tu contraseña?
+    </button>
     <button type="button" (click)="onSubmit()" class="btn btn-primary w-100">Iniciar Sesión</button>
   </form>
 </div>
