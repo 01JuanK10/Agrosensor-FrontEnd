@@ -78,4 +78,20 @@ export class AuthService {
     }
     return false;
   }
+
+resetPassword(username: string, newPassword: string, token: string): Observable<any> {
+  return this.http.post(
+    `${environment.apiUrl}/api/users/reset-password/${username}`,
+    { password: newPassword },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      responseType: 'text'
+    }
+  );
+}
+
+
 }
