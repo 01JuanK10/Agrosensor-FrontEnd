@@ -66,7 +66,7 @@ export class UserSidebar {
     {
       icon: 'person',
       label: 'Información Usuario',
-      route: 'usuario'
+      route: 'user'
     },
     {
       icon: 'map',
@@ -84,17 +84,17 @@ export class UserSidebar {
     {
       icon: 'group',
       label: 'Usuarios',
-      route: 'usuario'
+      route: 'users'
     },
     {
       icon: 'wifi_4_bar',
       label: 'Dispositivos',
-      route: 'mapas'
+      route: 'devices'
     },
     {
       icon: 'analytics',
       label: 'Analíticas',
-      route: 'analiticas'
+      route: 'analytics'
     }
   ]);
 

@@ -5,6 +5,8 @@ import { NotFound } from './features/core/not-found/not-found';
 import { AdminPanel } from './features/users/admin/components/admin-panel/admin-panel';
 import { ClientPanel } from './features/users/client/client-panel/client-panel';
 import { ErosionMap } from './features/users/client/erosion-map/erosion-map';
+import { UserResetPassword } from './features/users/core/components/user-reset-password/user-reset-password';
+import { DevicesManagement } from './features/users/admin/components/devices-management/devices-management';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -13,12 +15,16 @@ export const routes: Routes = [
         data: { role: 'ADMIN' },
         canActivateChild: [authGuard],
         children: [
-            { path: 'admin-panel', component: AdminPanel }
+            { path: 'admin-panel', component: AdminPanel, 
+                children: [
+                    {path: 'devices', component: DevicesManagement }
+                ]
+            }
         ]
     },
     { path: 'client',
         data: { role: 'CLIENT' },
-//        canActivateChild: [authGuard],
+        canActivateChild: [authGuard],
         children: [
             { path: 'client-panel', component: ClientPanel,
                 children: [
@@ -27,5 +33,6 @@ export const routes: Routes = [
             }
         ]
     },
+    { path: 'reset-password', component: UserResetPassword },
     {path: '**', component: NotFound }
 ];
