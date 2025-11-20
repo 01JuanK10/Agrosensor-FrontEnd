@@ -1,0 +1,39 @@
+<form [formGroup]="deviceForm" (ngSubmit)="onSubmit()" class="p-4">
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>MAC</mat-label>
+        <input matInput formControlName="mac" placeholder="Dirección MAC" [readonly]="!newDevice">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="types">
+            @for (type of types; track $index) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Ubicación</mat-label>
+        <input matInput formControlName="ubication" placeholder="Ex. Medellín">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Cliente</mat-label>
+        <mat-select formControlName="cliente" [compareWith]="compareClientes">
+            <mat-option [value]="null">Sin asignar</mat-option>
+            @for (client of clients; track client.cc) {
+                <mat-option [value]="client">
+                    {{ client.name }} {{ client.lastname }}
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+
+    <button mat-raised-button color="primary" type="submit">
+        Enviar información
+    </button>
+</form>

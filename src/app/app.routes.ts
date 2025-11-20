@@ -6,6 +6,7 @@ import { AdminPanel } from './features/users/admin/components/admin-panel/admin-
 import { ClientPanel } from './features/users/client/client-panel/client-panel';
 import { ErosionMap } from './features/users/client/erosion-map/erosion-map';
 import { UserResetPassword } from './features/users/core/components/user-reset-password/user-reset-password';
+import { DevicesManagement } from './features/users/admin/components/devices-management/devices-management';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,7 +15,11 @@ export const routes: Routes = [
         data: { role: 'ADMIN' },
         canActivateChild: [authGuard],
         children: [
-            { path: 'admin-panel', component: AdminPanel }
+            { path: 'admin-panel', component: AdminPanel, 
+                children: [
+                    {path: 'devices', component: DevicesManagement }
+                ]
+            }
         ]
     },
     { path: 'client',

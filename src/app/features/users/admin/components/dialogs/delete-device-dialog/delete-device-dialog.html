@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Borrar Dispositivo</h2>
+<mat-dialog-content class="mat-typography">
+    <p> ¿Estas seguro de eliminar el dispositivo?</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button matButton mat-dialog-close>Cancelar</button>
+    <button matButton mat-dialog-close cdkFocusInitial (click)="deleteDevice(deviceMac)">Eliminar</button>
+</mat-dialog-actions>
