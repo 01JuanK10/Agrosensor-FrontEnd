@@ -77,6 +77,11 @@ export class UserSidebar {
       icon: 'analytics',
       label: 'Analíticas',
       route: 'analytics'
+    },
+    {
+      icon: 'dashboard', // NUEVO
+      label: 'Dashboard',
+      route: 'dashboard'
     }
   ]);
 
