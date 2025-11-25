@@ -7,6 +7,7 @@ import { ClientPanel } from './features/users/client/client-panel/client-panel';
 import { ErosionMap } from './features/users/client/erosion-map/erosion-map';
 import { UserResetPassword } from './features/users/core/components/user-reset-password/user-reset-password';
 import { DevicesManagement } from './features/users/admin/components/devices-management/devices-management';
+import { Dashboard } from './features/users/client/dashboard/dashboard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -28,7 +29,8 @@ export const routes: Routes = [
         children: [
             { path: 'client-panel', component: ClientPanel,
                 children: [
-                    { path: 'erosion-map', component: ErosionMap }
+                    { path: 'erosion-map', component: ErosionMap },
+                    { path: 'dashboard', component: Dashboard }
                 ]
             }
         ]
