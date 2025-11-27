@@ -5,6 +5,10 @@ $color-danger: #ef4444;
 $color-warning: #facc15;
 $color-success: #22c55e;
 $color-info: #3b82f6;
+$color-light: #60a5fa;
+$color-temperature: #f97316;
+$color-purple: #a855f7;
+$color-teal: #14b8a6;
 
 .kpis-container {
   padding: 20px;
@@ -33,18 +37,29 @@ $color-info: #3b82f6;
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: $color-info;
           color: white;
 
-          &.erosion {
+          &.total {
+            background-color: $color-info;
+          }
+
+          &.light {
             background-color: $color-warning;
           }
 
           &.moisture {
-            background-color: $color-info;
+            background-color: $color-light;
           }
 
-          &.warning {
+          &.temperature {
+            background-color: $color-temperature;
+          }
+
+          &.env-moisture {
+            background-color: $color-teal;
+          }
+
+          &.erosion {
             background-color: $color-danger;
           }
 

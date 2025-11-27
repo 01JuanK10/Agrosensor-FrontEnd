@@ -6,9 +6,10 @@
   @if (stats(); as statistics) {
     <section class="stats-section mb-4">
       <div class="stats-grid">
+        <!-- Mediciones Totales -->
         <mat-card class="stat-card">
           <mat-card-content>
-            <div class="stat-icon">
+            <div class="stat-icon total">
               <mat-icon>assessment</mat-icon>
             </div>
             <div class="stat-info">
@@ -18,6 +19,59 @@
           </mat-card-content>
         </mat-card>
 
+        <!-- Iluminación Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon light">
+              <mat-icon>wb_sunny</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageIluminance }}%</h3>
+              <p>Iluminación Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Humedad del Suelo Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon moisture">
+              <mat-icon>opacity</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageSoilMoisture }}%</h3>
+              <p>Humedad del Suelo Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Temperatura Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon temperature">
+              <mat-icon>thermostat</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageTemperature }}°C</h3>
+              <p>Temperatura Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Humedad Ambiental Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon env-moisture">
+              <mat-icon>water_drop</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageEnvironmentMoisture }}%</h3>
+              <p>Humedad Ambiental Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Erosión Promedio -->
         <mat-card class="stat-card">
           <mat-card-content>
             <div class="stat-icon erosion">
@@ -26,30 +80,6 @@
             <div class="stat-info">
               <h3>{{ statistics.averageErosion }}%</h3>
               <p>Erosión Promedio</p>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="stat-card">
-          <mat-card-content>
-            <div class="stat-icon moisture">
-              <mat-icon>opacity</mat-icon>
-            </div>
-            <div class="stat-info">
-              <h3>{{ statistics.averageMoisture }}%</h3>
-              <p>Humedad Promedio</p>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="stat-card">
-          <mat-card-content>
-            <div class="stat-icon warning">
-              <mat-icon>warning</mat-icon>
-            </div>
-            <div class="stat-info">
-              <h3>{{ statistics.criticalDevices }}</h3>
-              <p>Dispositivos Críticos</p>
             </div>
           </mat-card-content>
         </mat-card>

@@ -33,14 +33,19 @@ export class KpisPanel implements OnInit {
     const data = this.measurements();
     if (data.length === 0) return null;
 
+    const avgIluminance = data.reduce((sum, m) => sum + m.soilIluminance, 0) / data.length;
+    const avgSoilMoisture = data.reduce((sum, m) => sum + m.soilMoisture, 0) / data.length;
+    const avgTemperature = data.reduce((sum, m) => sum + m.environmentTemperature, 0) / data.length;
+    const avgEnvironmentMoisture = data.reduce((sum, m) => sum + m.environmentMoisture, 0) / data.length;
     const avgErosion = data.reduce((sum, m) => sum + m.erosion, 0) / data.length;
-    const avgMoisture = data.reduce((sum, m) => sum + m.soilMoisture, 0) / data.length;
 
     return {
       totalMeasurements: data.length,
-      averageErosion: avgErosion.toFixed(2),
-      averageMoisture: avgMoisture.toFixed(2),
-      criticalDevices: data.filter(m => m.erosion >= this.THRESHOLDS.erosion.critical).length
+      averageIluminance: avgIluminance.toFixed(2),
+      averageSoilMoisture: avgSoilMoisture.toFixed(2),
+      averageTemperature: avgTemperature.toFixed(2),
+      averageEnvironmentMoisture: avgEnvironmentMoisture.toFixed(2),
+      averageErosion: avgErosion.toFixed(2)
     };
   });
 
@@ -63,11 +68,10 @@ export class KpisPanel implements OnInit {
   loadMeasurements(): void {
     this.measurementsService.getAllMeasurements().subscribe({
       next: (data) => {
-        // Ordenar por fecha descendente (más reciente primero)
         const sortedData = data.sort((a, b) => {
           const dateA = new Date(a.dateTime).getTime();
           const dateB = new Date(b.dateTime).getTime();
-          return dateB - dateA; // Orden descendente
+          return dateB - dateA;
         });
         this.measurements.set(sortedData);
       },
