@@ -79,9 +79,14 @@ export class UserSidebar {
       route: 'analytics'
     },
     {
-      icon: 'dashboard', // NUEVO
-      label: 'Dashboard',
-      route: 'dashboard'
+      icon: 'notifications',
+      label: 'Notificaciones',
+      route: 'notifications'
+    },
+    {
+      icon: 'analytics',
+      label: 'KPIs y Mediciones',
+      route: 'kpis'
     }
   ]);
 
