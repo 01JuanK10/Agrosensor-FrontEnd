@@ -47,13 +47,30 @@ export class NotificationsPanel implements OnInit {
   }
 
   private generateAlerts(measurements: SoilMeasurement[]): void {
+    // Agrupar mediciones por dispositivo
+    const measurementsByDevice = new Map<string, SoilMeasurement>();
+    
+    // Obtener solo la medición más reciente de cada dispositivo
+    measurements.forEach(measurement => {
+      const deviceId = measurement.device.id;
+      const existing = measurementsByDevice.get(deviceId);
+      
+      if (!existing || new Date(measurement.dateTime) > new Date(existing.dateTime)) {
+        measurementsByDevice.set(deviceId, measurement);
+      }
+    });
+
     const newAlerts: Alert[] = [];
 
-    measurements.forEach(measurement => {
+    // Generar alertas solo para las mediciones más recientes
+    measurementsByDevice.forEach((measurement) => {
+      const deviceAddress = measurement.device.location.address;
+      
+      // Verificar erosión
       if (measurement.erosion >= this.THRESHOLDS.erosion.critical) {
         newAlerts.push({
           type: 'danger',
-          message: `⚠️ EROSIÓN CRÍTICA: ${measurement.erosion.toFixed(1)}% en ${measurement.device.location.address}`,
+          message: `⚠️ EROSIÓN CRÍTICA: ${measurement.erosion.toFixed(1)}% en ${deviceAddress}`,
           deviceId: measurement.device.id,
           timestamp: new Date(measurement.dateTime)
         });
@@ -61,35 +78,36 @@ export class NotificationsPanel implements OnInit {
       else if (measurement.erosion >= this.THRESHOLDS.erosion.warning) {
         newAlerts.push({
           type: 'warning',
-          message: `⚡ Erosión moderada: ${measurement.erosion.toFixed(1)}% en ${measurement.device.location.address}`,
+          message: `⚡ Erosión moderada: ${measurement.erosion.toFixed(1)}% en ${deviceAddress}`,
           deviceId: measurement.device.id,
           timestamp: new Date(measurement.dateTime)
         });
       }
 
+      // Verificar humedad del suelo
       if (measurement.soilMoisture < this.THRESHOLDS.soilMoisture.low) {
         newAlerts.push({
           type: 'warning',
-          message: `💧 Humedad del suelo baja: ${measurement.soilMoisture.toFixed(1)}% en ${measurement.device.location.address}`,
+          message: `💧 Humedad del suelo baja: ${measurement.soilMoisture.toFixed(1)}% en ${deviceAddress}`,
           deviceId: measurement.device.id,
           timestamp: new Date(measurement.dateTime)
         });
       }
 
+      // Verificar temperatura
       if (measurement.environmentTemperature > this.THRESHOLDS.temperature.high) {
         newAlerts.push({
           type: 'warning',
-          message: `🌡️ Temperatura alta: ${measurement.environmentTemperature.toFixed(1)}°C en ${measurement.device.location.address}`,
+          message: `🌡️ Temperatura alta: ${measurement.environmentTemperature.toFixed(1)}°C en ${deviceAddress}`,
           deviceId: measurement.device.id,
           timestamp: new Date(measurement.dateTime)
         });
       }
     });
 
+    // Ordenar por timestamp descendente (más reciente primero)
     this.alerts.set(
-      newAlerts
-        .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-        .slice(0, 10)
+      newAlerts.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
     );
   }
 }
