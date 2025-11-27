@@ -47,9 +47,11 @@ export class KpisPanel implements OnInit {
   displayedColumns: string[] = [
     'device',
     'dateTime',
-    'erosion',
+    'soilIluminance',
     'soilMoisture',
-    'temperature',
+    'environmentTemperature',
+    'environmentMoisture',
+    'erosion',
     'status'
   ];
 

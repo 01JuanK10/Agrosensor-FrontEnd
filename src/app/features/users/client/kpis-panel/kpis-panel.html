@@ -90,6 +90,46 @@
               </td>
             </ng-container>
 
+            <!-- Columna Iluminación del Suelo -->
+            <ng-container matColumnDef="soilIluminance">
+              <th mat-header-cell *matHeaderCellDef>Iluminación Suelo</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.soilIluminance.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Humedad del Suelo -->
+            <ng-container matColumnDef="soilMoisture">
+              <th mat-header-cell *matHeaderCellDef>Humedad Suelo</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.soilMoisture.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Temperatura Ambiente -->
+            <ng-container matColumnDef="environmentTemperature">
+              <th mat-header-cell *matHeaderCellDef>Temp. Ambiente</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.environmentTemperature.toFixed(1) }}°C
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Humedad Ambiente -->
+            <ng-container matColumnDef="environmentMoisture">
+              <th mat-header-cell *matHeaderCellDef>Hum. Ambiente</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.environmentMoisture.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
             <!-- Columna Erosión -->
             <ng-container matColumnDef="erosion">
               <th mat-header-cell *matHeaderCellDef>Erosión</th>
@@ -99,22 +139,6 @@
                   [style.color]="getErosionColor(measurement.erosion)">
                   {{ measurement.erosion.toFixed(1) }}%
                 </span>
-              </td>
-            </ng-container>
-
-            <!-- Columna Humedad -->
-            <ng-container matColumnDef="soilMoisture">
-              <th mat-header-cell *matHeaderCellDef>Humedad Suelo</th>
-              <td mat-cell *matCellDef="let measurement">
-                {{ measurement.soilMoisture.toFixed(1) }}%
-              </td>
-            </ng-container>
-
-            <!-- Columna Temperatura -->
-            <ng-container matColumnDef="temperature">
-              <th mat-header-cell *matHeaderCellDef>Temperatura</th>
-              <td mat-cell *matCellDef="let measurement">
-                {{ measurement.environmentTemperature.toFixed(1) }}°C
               </td>
             </ng-container>
 
