@@ -62,7 +62,15 @@ export class KpisPanel implements OnInit {
 
   loadMeasurements(): void {
     this.measurementsService.getAllMeasurements().subscribe({
-      next: (data) => this.measurements.set(data),
+      next: (data) => {
+        // Ordenar por fecha descendente (más reciente primero)
+        const sortedData = data.sort((a, b) => {
+          const dateA = new Date(a.dateTime).getTime();
+          const dateB = new Date(b.dateTime).getTime();
+          return dateB - dateA; // Orden descendente
+        });
+        this.measurements.set(sortedData);
+      },
       error: (err) => console.error('Error loading measurements:', err)
     });
   }
