@@ -85,7 +85,7 @@ export class UserSidebar {
     },
     {
       icon: 'analytics',
-      label: 'KPIs y Mediciones',
+      label: 'Dashboard',
       route: 'kpis'
     }
   ]);

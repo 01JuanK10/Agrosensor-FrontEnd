@@ -156,3 +156,19 @@ $color-teal: #14b8a6;
     }
   }
 }
+
+.charts-section {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 25px;
+}
+
+.chart-card {
+  padding: 15px;
+
+  canvas {
+    width: 100% !important;
+    max-height: 350px !important;  /* antes 350px */
+  }
+}

@@ -85,6 +85,39 @@
         </mat-card>
       </div>
     </section>
+
+    <section class="charts-section">
+
+      <!-- Comparación de KPIs por Dispositivo -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Comparación de Medidas por Dispositivo</mat-card-title>
+          <mat-card-subtitle>
+            Humedad, Temperatura y Erosión por Sensor
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <canvas id="kpiComparisonChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Distribución de Estados del Cultivo -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Salud General del Cultivo</mat-card-title>
+          <mat-card-subtitle>
+            Distribución por estado de medición
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <canvas id="healthStatusChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+
+    </section>
+
   }
 
   <!-- Data Table -->

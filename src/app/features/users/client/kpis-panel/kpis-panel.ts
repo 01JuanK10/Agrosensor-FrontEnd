@@ -6,6 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
+import { AfterViewInit } from '@angular/core';
+import Chart from 'chart.js/auto';
+
 
 @Component({
   selector: 'app-kpis-panel',
@@ -20,7 +23,7 @@ import { MatChipsModule } from '@angular/material/chips';
   templateUrl: './kpis-panel.html',
   styleUrls: ['./kpis-panel.scss']
 })
-export class KpisPanel implements OnInit {
+export class KpisPanel implements OnInit, AfterViewInit {
   private measurementsService = inject(MeasurementsService);
   
   measurements = signal<SoilMeasurement[]>([]);
@@ -96,4 +99,96 @@ export class KpisPanel implements OnInit {
     if (measurement.erosion >= this.THRESHOLDS.erosion.warning) return 'warning';
     return 'success';
   }
+
+  ngAfterViewInit(): void {
+    this.measurementsService.getAllMeasurements().subscribe(data => {
+      this.measurements.set(data);
+      this.renderCharts(data);
+    });
+  }
+
+  private renderCharts(data: SoilMeasurement[]) {
+    this.createComparisonChart(data);
+    this.createHealthStatusChart(data);
+  }
+
+  private createComparisonChart(data: SoilMeasurement[]) {
+    // Agrupar por dispositivo, manteniendo SOLO la medición más reciente
+    const latestByDevice = new Map<string, SoilMeasurement>();
+
+    data.forEach(m => {
+      const deviceId = m.device.id;
+      const existing = latestByDevice.get(deviceId);
+
+      if (!existing || new Date(m.dateTime) > new Date(existing.dateTime)) {
+        latestByDevice.set(deviceId, m);
+      }
+    });
+
+    // Convertir a formato del gráfico
+    const labels = Array.from(latestByDevice.keys());
+    const latestMeasurements = Array.from(latestByDevice.values());
+
+    const humidity = latestMeasurements.map(m => m.soilMoisture);
+    const temperature = latestMeasurements.map(m => m.environmentTemperature);
+    const erosion = latestMeasurements.map(m => m.erosion);
+
+    new Chart('kpiComparisonChart', {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { 
+            label: 'Humedad (%)', 
+            data: humidity,
+            backgroundColor: '#60a5fa'
+          },
+          { 
+            label: 'Temperatura (°C)', 
+            data: temperature,
+            backgroundColor: '#f97316'
+          },
+          { 
+            label: 'Erosión (%)', 
+            data: erosion,
+            backgroundColor: '#ef4444'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' }
+        }
+      }
+    });
+  }
+
+  private createHealthStatusChart(data: SoilMeasurement[]) {
+    let ok = 0, warning = 0, critical = 0;
+
+    data.forEach(m => {
+      if (m.erosion < 35) ok++;
+      else if (m.erosion < 60) warning++;
+      else critical++;
+    });
+
+    new Chart('healthStatusChart', {
+      type: 'doughnut',
+      data: {
+        labels: ['Óptimo', 'Advertencia', 'Crítico'],
+        datasets: [{
+          data: [ok, warning, critical],
+          backgroundColor: ['#22c55e', '#facc15', '#ef4444']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  }
+
 }
