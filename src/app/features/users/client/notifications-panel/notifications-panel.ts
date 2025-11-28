@@ -1,9 +1,10 @@
 // src/app/features/users/client/notifications-panel/notifications-panel.ts
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MeasurementsService, SoilMeasurement } from '../../../services/measurements.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { interval, Subscription } from 'rxjs';
 
 interface Alert {
   type: 'danger' | 'warning' | 'info';
@@ -23,10 +24,11 @@ interface Alert {
   templateUrl: './notifications-panel.html',
   styleUrls: ['./notifications-panel.scss']
 })
-export class NotificationsPanel implements OnInit {
+export class NotificationsPanel implements OnInit, OnDestroy {
   private measurementsService = inject(MeasurementsService);
   
   alerts = signal<Alert[]>([]);
+  private pollingSubscription?: Subscription;
   
   private readonly THRESHOLDS = {
     erosion: { critical: 60, warning: 35 },
@@ -34,9 +36,25 @@ export class NotificationsPanel implements OnInit {
     temperature: { low: 10, high: 35 }
   };
 
+  // Intervalo de actualización: cada 10 segundos
+  private readonly POLLING_INTERVAL = 10000;
+
   ngOnInit(): void {
+    // Carga inicial
     this.loadAlerts();
-    setInterval(() => this.loadAlerts(), 30000);
+    
+    // Configurar polling automático
+    this.pollingSubscription = interval(this.POLLING_INTERVAL)
+      .subscribe(() => {
+        this.loadAlerts();
+      });
+  }
+
+  ngOnDestroy(): void {
+    // Limpiar suscripción al destruir el componente
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+    }
   }
 
   private loadAlerts(): void {
@@ -47,10 +65,9 @@ export class NotificationsPanel implements OnInit {
   }
 
   private generateAlerts(measurements: SoilMeasurement[]): void {
-    // Agrupar mediciones por dispositivo
+    // Agrupar mediciones por dispositivo y obtener solo la más reciente
     const measurementsByDevice = new Map<string, SoilMeasurement>();
     
-    // Obtener solo la medición más reciente de cada dispositivo
     measurements.forEach(measurement => {
       const deviceId = measurement.device.id;
       const existing = measurementsByDevice.get(deviceId);

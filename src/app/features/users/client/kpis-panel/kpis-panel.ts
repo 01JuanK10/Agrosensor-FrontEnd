@@ -1,5 +1,5 @@
 // src/app/features/users/client/kpis-panel/kpis-panel.ts
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MeasurementsService, SoilMeasurement } from '../../../services/measurements.service';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { AfterViewInit } from '@angular/core';
 import Chart from 'chart.js/auto';
-
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-kpis-panel',
@@ -23,14 +23,20 @@ import Chart from 'chart.js/auto';
   templateUrl: './kpis-panel.html',
   styleUrls: ['./kpis-panel.scss']
 })
-export class KpisPanel implements OnInit, AfterViewInit {
+export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
   private measurementsService = inject(MeasurementsService);
   
   measurements = signal<SoilMeasurement[]>([]);
+  private pollingSubscription?: Subscription;
+  private kpiComparisonChart?: Chart;
+  private healthStatusChart?: Chart;
   
   private readonly THRESHOLDS = {
     erosion: { critical: 60, warning: 35 }
   };
+
+  // Intervalo de actualización: cada 15 segundos
+  private readonly POLLING_INTERVAL = 15000;
 
   stats = computed(() => {
     const data = this.measurements();
@@ -64,11 +70,34 @@ export class KpisPanel implements OnInit, AfterViewInit {
   ];
 
   ngOnInit(): void {
+    // Carga inicial
     this.loadMeasurements();
-    setInterval(() => this.loadMeasurements(), 30000);
+    
+    // Configurar polling automático
+    this.pollingSubscription = interval(this.POLLING_INTERVAL)
+      .subscribe(() => {
+        this.loadMeasurements();
+      });
   }
 
-  loadMeasurements(): void {
+  ngAfterViewInit(): void {
+    // Los gráficos se crearán después de la primera carga de datos
+  }
+
+  ngOnDestroy(): void {
+    // Limpiar suscripción y gráficos
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+    }
+    if (this.kpiComparisonChart) {
+      this.kpiComparisonChart.destroy();
+    }
+    if (this.healthStatusChart) {
+      this.healthStatusChart.destroy();
+    }
+  }
+
+  private loadMeasurements(): void {
     this.measurementsService.getAllMeasurements().subscribe({
       next: (data) => {
         const sortedData = data.sort((a, b) => {
@@ -77,42 +106,23 @@ export class KpisPanel implements OnInit, AfterViewInit {
           return dateB - dateA;
         });
         this.measurements.set(sortedData);
+        
+        // Actualizar gráficos
+        this.updateCharts(sortedData);
       },
       error: (err) => console.error('Error loading measurements:', err)
     });
   }
 
-  getErosionColor(value: number): string {
-    if (value < this.THRESHOLDS.erosion.warning) return '#22c55e';
-    if (value < this.THRESHOLDS.erosion.critical) return '#facc15';
-    return '#ef4444';
+  private updateCharts(data: SoilMeasurement[]): void {
+    if (data.length === 0) return;
+
+    // Actualizar o crear gráficos
+    this.updateComparisonChart(data);
+    this.updateHealthStatusChart(data);
   }
 
-  getStatusIcon(measurement: SoilMeasurement): string {
-    if (measurement.erosion >= this.THRESHOLDS.erosion.critical) return 'error';
-    if (measurement.erosion >= this.THRESHOLDS.erosion.warning) return 'warning';
-    return 'check_circle';
-  }
-
-  getStatusColor(measurement: SoilMeasurement): string {
-    if (measurement.erosion >= this.THRESHOLDS.erosion.critical) return 'danger';
-    if (measurement.erosion >= this.THRESHOLDS.erosion.warning) return 'warning';
-    return 'success';
-  }
-
-  ngAfterViewInit(): void {
-    this.measurementsService.getAllMeasurements().subscribe(data => {
-      this.measurements.set(data);
-      this.renderCharts(data);
-    });
-  }
-
-  private renderCharts(data: SoilMeasurement[]) {
-    this.createComparisonChart(data);
-    this.createHealthStatusChart(data);
-  }
-
-  private createComparisonChart(data: SoilMeasurement[]) {
+  private updateComparisonChart(data: SoilMeasurement[]): void {
     // Agrupar por dispositivo, manteniendo SOLO la medición más reciente
     const latestByDevice = new Map<string, SoilMeasurement>();
 
@@ -133,38 +143,51 @@ export class KpisPanel implements OnInit, AfterViewInit {
     const temperature = latestMeasurements.map(m => m.environmentTemperature);
     const erosion = latestMeasurements.map(m => m.erosion);
 
-    new Chart('kpiComparisonChart', {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          { 
-            label: 'Humedad (%)', 
-            data: humidity,
-            backgroundColor: '#60a5fa'
-          },
-          { 
-            label: 'Temperatura (°C)', 
-            data: temperature,
-            backgroundColor: '#f97316'
-          },
-          { 
-            label: 'Erosión (%)', 
-            data: erosion,
-            backgroundColor: '#ef4444'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'top' }
+    const chartData = {
+      labels,
+      datasets: [
+        { 
+          label: 'Humedad (%)', 
+          data: humidity,
+          backgroundColor: '#60a5fa'
+        },
+        { 
+          label: 'Temperatura (°C)', 
+          data: temperature,
+          backgroundColor: '#f97316'
+        },
+        { 
+          label: 'Erosión (%)', 
+          data: erosion,
+          backgroundColor: '#ef4444'
         }
+      ]
+    };
+
+    if (this.kpiComparisonChart) {
+      // Actualizar gráfico existente
+      this.kpiComparisonChart.data = chartData;
+      this.kpiComparisonChart.update('none'); // 'none' evita animación
+    } else {
+      // Crear nuevo gráfico
+      const canvas = document.getElementById('kpiComparisonChart') as HTMLCanvasElement;
+      if (canvas) {
+        this.kpiComparisonChart = new Chart(canvas, {
+          type: 'bar',
+          data: chartData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'top' }
+            },
+            animation: false // Desactivar animación en actualizaciones
+          }
+        });
       }
-    });
+    }
   }
 
-  private createHealthStatusChart(data: SoilMeasurement[]) {
+  private updateHealthStatusChart(data: SoilMeasurement[]): void {
     let ok = 0, warning = 0, critical = 0;
 
     data.forEach(m => {
@@ -173,22 +196,52 @@ export class KpisPanel implements OnInit, AfterViewInit {
       else critical++;
     });
 
-    new Chart('healthStatusChart', {
-      type: 'doughnut',
-      data: {
-        labels: ['Óptimo', 'Advertencia', 'Crítico'],
-        datasets: [{
-          data: [ok, warning, critical],
-          backgroundColor: ['#22c55e', '#facc15', '#ef4444']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'bottom' }
-        }
+    const chartData = {
+      labels: ['Óptimo', 'Advertencia', 'Crítico'],
+      datasets: [{
+        data: [ok, warning, critical],
+        backgroundColor: ['#22c55e', '#facc15', '#ef4444']
+      }]
+    };
+
+    if (this.healthStatusChart) {
+      // Actualizar gráfico existente
+      this.healthStatusChart.data = chartData;
+      this.healthStatusChart.update('none');
+    } else {
+      // Crear nuevo gráfico
+      const canvas = document.getElementById('healthStatusChart') as HTMLCanvasElement;
+      if (canvas) {
+        this.healthStatusChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: chartData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'bottom' }
+            },
+            animation: false
+          }
+        });
       }
-    });
+    }
   }
 
+  getErosionColor(value: number): string {
+    if (value < this.THRESHOLDS.erosion.warning) return '#22c55e';
+    if (value < this.THRESHOLDS.erosion.critical) return '#facc15';
+    return '#ef4444';
+  }
+
+  getStatusIcon(measurement: SoilMeasurement): string {
+    if (measurement.erosion >= this.THRESHOLDS.erosion.critical) return 'error';
+    if (measurement.erosion >= this.THRESHOLDS.erosion.warning) return 'warning';
+    return 'check_circle';
+  }
+
+  getStatusColor(measurement: SoilMeasurement): string {
+    if (measurement.erosion >= this.THRESHOLDS.erosion.critical) return 'danger';
+    if (measurement.erosion >= this.THRESHOLDS.erosion.warning) return 'warning';
+    return 'success';
+  }
 }
