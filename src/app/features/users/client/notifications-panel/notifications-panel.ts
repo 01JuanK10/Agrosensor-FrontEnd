@@ -122,9 +122,23 @@ export class NotificationsPanel implements OnInit, OnDestroy {
       }
     });
 
-    // Ordenar por timestamp descendente (más reciente primero)
+    // Ordenar por fecha (más reciente primero).
+    // Si dos alertas tienen la misma fecha/hora, ordenar por severidad: danger > warning > info
+    const severityOrder: Record<Alert['type'], number> = {
+      danger: 3,
+      warning: 2,
+      info: 1
+    };
+
     this.alerts.set(
-      newAlerts.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+      newAlerts.sort((a, b) => {
+        // 1) comparar timestamps
+        const timeDiff = b.timestamp.getTime() - a.timestamp.getTime();
+        if (timeDiff !== 0) return timeDiff;
+
+        // 2) misma fecha/hora -> comparar severidad
+        return severityOrder[b.type] - severityOrder[a.type];
+      })
     );
   }
 }
