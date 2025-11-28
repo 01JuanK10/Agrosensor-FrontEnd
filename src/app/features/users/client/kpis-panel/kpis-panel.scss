@@ -158,7 +158,8 @@ $color-teal: #14b8a6;
 }
 
 .charts-section {
-  margin-top: 40px;
+  margin-top: 60px;
+  margin-bottom: 60px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 25px;
