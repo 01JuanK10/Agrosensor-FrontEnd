@@ -102,7 +102,7 @@ export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
       next: (data) => {
         // 1. Ordenar por fecha (más reciente primero)
         // 2. Luego por nombre de dispositivo (alfabéticamente)
-        const sortedData = data.sort((a, b) => {
+        const sortedData = [...data].sort((a, b) => {
           const dateA = new Date(a.dateTime).getTime();
           const dateB = new Date(b.dateTime).getTime();
           
