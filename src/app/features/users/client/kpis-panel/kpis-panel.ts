@@ -100,11 +100,21 @@ export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
   private loadMeasurements(): void {
     this.measurementsService.getAllMeasurements().subscribe({
       next: (data) => {
+        // 1. Ordenar por fecha (más reciente primero)
+        // 2. Luego por nombre de dispositivo (alfabéticamente)
         const sortedData = data.sort((a, b) => {
           const dateA = new Date(a.dateTime).getTime();
           const dateB = new Date(b.dateTime).getTime();
-          return dateB - dateA;
+          
+          // Primero ordenar por fecha (descendente - más reciente primero)
+          if (dateB !== dateA) {
+            return dateB - dateA;
+          }
+          
+          // Si las fechas son iguales, ordenar alfabéticamente por device ID
+          return a.device.id.localeCompare(b.device.id);
         });
+        
         this.measurements.set(sortedData);
         
         // Actualizar gráficos
@@ -135,9 +145,13 @@ export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    // Convertir a formato del gráfico
-    const labels = Array.from(latestByDevice.keys());
-    const latestMeasurements = Array.from(latestByDevice.values());
+    // Convertir a formato del gráfico y ordenar alfabéticamente
+    const sortedEntries = Array.from(latestByDevice.entries()).sort((a, b) => 
+      a[0].localeCompare(b[0])
+    );
+    
+    const labels = sortedEntries.map(entry => entry[0]);
+    const latestMeasurements = sortedEntries.map(entry => entry[1]);
 
     const humidity = latestMeasurements.map(m => m.soilMoisture);
     const temperature = latestMeasurements.map(m => m.environmentTemperature);
