@@ -133,7 +133,8 @@ export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private updateComparisonChart(data: SoilMeasurement[]): void {
-    // Agrupar por dispositivo, manteniendo SOLO la medición más reciente
+
+    // 1. Agrupar por dispositivo (última medición)
     const latestByDevice = new Map<string, SoilMeasurement>();
 
     data.forEach(m => {
@@ -145,11 +146,10 @@ export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    // Convertir a formato del gráfico y ordenar alfabéticamente
-    const sortedEntries = Array.from(latestByDevice.entries()).sort((a, b) => 
+    const sortedEntries = Array.from(latestByDevice.entries()).sort((a, b) =>
       a[0].localeCompare(b[0])
     );
-    
+
     const labels = sortedEntries.map(entry => entry[0]);
     const latestMeasurements = sortedEntries.map(entry => entry[1]);
 
@@ -157,47 +157,72 @@ export class KpisPanel implements OnInit, OnDestroy, AfterViewInit {
     const temperature = latestMeasurements.map(m => m.environmentTemperature);
     const erosion = latestMeasurements.map(m => m.erosion);
 
-    const chartData = {
-      labels,
-      datasets: [
-        { 
-          label: 'Humedad (%)', 
-          data: humidity,
-          backgroundColor: '#60a5fa'
-        },
-        { 
-          label: 'Temperatura (°C)', 
-          data: temperature,
-          backgroundColor: '#f97316'
-        },
-        { 
-          label: 'Erosión (%)', 
-          data: erosion,
-          backgroundColor: '#ef4444'
-        }
-      ]
-    };
+    const newDatasets = [
+      {
+        label: 'Humedad (%)',
+        data: humidity,
+        backgroundColor: '#60a5fa'
+      },
+      {
+        label: 'Temperatura (°C)',
+        data: temperature,
+        backgroundColor: '#f97316'
+      },
+      {
+        label: 'Erosión (%)',
+        data: erosion,
+        backgroundColor: '#ef4444'
+      }
+    ];
+
+    // 🔥 ***PARTE IMPORTANTE: guardar visibilidad actual***
+    const currentVisibility: Record<string, boolean | null | undefined> = {};
 
     if (this.kpiComparisonChart) {
-      // Actualizar gráfico existente
-      this.kpiComparisonChart.data = chartData;
-      this.kpiComparisonChart.update('none'); // 'none' evita animación
-    } else {
-      // Crear nuevo gráfico
+      this.kpiComparisonChart.data.datasets.forEach((ds, index) => {
+        const meta = this.kpiComparisonChart!.getDatasetMeta(index);
+        currentVisibility[ds.label!] = meta.hidden;
+      });
+    }
+
+    // Crear o actualizar chart
+    if (!this.kpiComparisonChart) {
       const canvas = document.getElementById('kpiComparisonChart') as HTMLCanvasElement;
-      if (canvas) {
-        this.kpiComparisonChart = new Chart(canvas, {
-          type: 'bar',
-          data: chartData,
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { position: 'top' }
-            },
-            animation: false // Desactivar animación en actualizaciones
-          }
-        });
-      }
+
+      if (!canvas) return;
+
+      this.kpiComparisonChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: newDatasets
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' }
+          },
+          animation: false
+        }
+      });
+
+    } else {
+      // 2️⃣ Actualizar solo los valores sin recrear objetos
+      this.kpiComparisonChart.data.labels = labels;
+
+      this.kpiComparisonChart.data.datasets.forEach((dataset, idx) => {
+        dataset.data = newDatasets[idx].data;
+      });
+
+      // 🔥 ***RESTABLECER visibilidad del usuario***
+      this.kpiComparisonChart.data.datasets.forEach((ds, index) => {
+        const prev = currentVisibility[ds.label!];
+
+        // null/undefined = visible (false), true = oculto
+        this.kpiComparisonChart!.getDatasetMeta(index).hidden = prev ?? false;
+      });
+
+      this.kpiComparisonChart.update('none');
     }
   }
 

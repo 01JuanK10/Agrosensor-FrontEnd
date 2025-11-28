@@ -79,11 +79,6 @@ export class UserSidebar {
       route: 'analytics'
     },
     {
-      icon: 'notifications',
-      label: 'Notificaciones',
-      route: 'notifications'
-    },
-    {
       icon: 'analytics',
       label: 'Dashboard',
       route: 'kpis'

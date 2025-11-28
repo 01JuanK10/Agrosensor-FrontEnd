@@ -17,3 +17,12 @@ mat-toolbar {
 h1, .mat-icon {
   color: $color-dark !important;
 }
+
+// Estilo para el botón de notificaciones activo
+.active-notification {
+  background-color: rgba($color-accent, 0.1);
+  
+  .mat-icon {
+    color: $color-accent !important;
+  }
+}

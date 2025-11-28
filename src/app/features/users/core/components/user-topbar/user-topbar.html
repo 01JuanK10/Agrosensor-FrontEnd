@@ -1,6 +1,6 @@
 <mat-toolbar class="mat-elevation-z3">
     <button matIconButton class="example-icon" matTooltip="Abrir menú" (click)="onMenuToggle()">
-    <mat-icon>menu</mat-icon>
+        <mat-icon>menu</mat-icon>
     </button>
     <a class="navbar-brand" routerLink="/inicio">
         <img
@@ -15,21 +15,25 @@
 
     <span class="example-spacer"></span>
     
-    <button style="margin: 4px;" 
-            mat-icon-button 
-            class="example-icon favorite-icon" 
-            matTooltip="Cerrar sesión" 
-            (click)="exitApp()">
-    <mat-icon>logout</mat-icon>
+    <!-- Botón de notificaciones (solo visible para CLIENT) -->
+    <button 
+        *ngIf="isClientRole()" 
+        style="margin: 4px;" 
+        mat-icon-button 
+        class="example-icon" 
+        matTooltip="Notificaciones"
+        routerLink="/client/client-panel/notifications"
+        routerLinkActive="active-notification">
+        <mat-icon>notifications</mat-icon>
     </button>
-<!-- 
-    esto va en el boton de importar -> (click)="fileInput.click()"
-    <input #fileInput 
-        type="file" 
-        style="display: none;" 
-        (change)="importar($event)" />    
--->
 
-
-
+    <button 
+        style="margin: 4px;" 
+        mat-icon-button 
+        class="example-icon favorite-icon" 
+        matTooltip="Cerrar sesión" 
+        (click)="exitApp()">
+        <mat-icon>logout</mat-icon>
+    </button>
+    
 </mat-toolbar>
