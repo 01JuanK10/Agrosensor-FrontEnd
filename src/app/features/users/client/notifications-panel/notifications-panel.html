@@ -1,0 +1,38 @@
+<!-- src/app/features/users/client/notifications-panel/notifications-panel.html -->
+<div class="notifications-container">
+  <h2 class="page-title-2 mb-4">Alertas Tempranas</h2>
+
+  <section class="alerts-section">
+    <mat-card class="alerts-card">
+      <mat-card-header>
+        <mat-icon class="alert-icon">notifications_active</mat-icon>
+        <mat-card-title>Sistema de Monitoreo en Tiempo Real</mat-card-title>
+        <mat-card-subtitle>
+          Notificaciones automáticas de condiciones críticas
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        @if (alerts().length === 0) {
+          <div class="no-alerts">
+            <mat-icon>check_circle</mat-icon>
+            <p>No hay alertas activas. Todos los sistemas funcionan normalmente.</p>
+          </div>
+        } @else {
+          <div class="alerts-list">
+            @for (alert of alerts(); track alert.deviceId + alert.timestamp) {
+              <div class="alert-item" [class]="'alert-' + alert.type">
+                <div class="alert-content">
+                  <span class="alert-message">{{ alert.message }}</span>
+                  <span class="alert-time">
+                    {{ alert.timestamp | date: 'short' }}
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

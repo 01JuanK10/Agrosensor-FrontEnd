@@ -12,23 +12,23 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
-  background: $color-primary !important; // Naranja intenso, contrasta bien con el topbar
+  background: $color-accent !important; // Naranja intenso, contrasta bien con el topbar
   border-radius: 0px;
 }
 
 span, .mat-icon {
-  color: $color-dark !important; // Mantiene legibilidad
+  color: $color-light !important; // Mantiene legibilidad
 }
 h2, p{
-  color: $color-dark !important;
+  color: $color-light !important;
 }
 
 a {
   margin-top: 10px;
-  color: $color-dark !important;
+  color: $color-light !important;
   text-decoration: none;
 
   &:hover {
-    color: lighten($color-light, 10%) !important;
+    color: lighten($color-dark, 10%) !important;
   }
 }

@@ -1,29 +1,39 @@
 <mat-toolbar class="mat-elevation-z3">
     <button matIconButton class="example-icon" matTooltip="Abrir menú" (click)="onMenuToggle()">
-    <mat-icon>menu</mat-icon>
+        <mat-icon>menu</mat-icon>
     </button>
-    <a routerLink="/inicio" style="display: flex; align-items: center; text-decoration: none;">
-        <img style="height: 40px; margin: 0px 8px; border-radius: 30%;" src="assets/dark-logo.png" alt="logo">
-        <h1 style="font-size: x-large; margin-top: 3px;">AgroSensor</h1>
+    <a class="navbar-brand" routerLink="/inicio">
+        <img
+            src="assets/logo.png"
+            alt="Logo"
+            width="34"
+            height="32"
+            class="d-inline-block align-text-center"
+        />
+        <span class="bold-text ps-2" style="color: #F59E0B;">A</span>gro<span class="bold-text" style="color: #F59E0B;">S</span>ensor
     </a>
 
     <span class="example-spacer"></span>
     
-    <button style="margin: 4px;" 
-            mat-icon-button 
-            class="example-icon favorite-icon" 
-            matTooltip="Cerrar sesión" 
-            (click)="exitApp()">
-    <mat-icon>logout</mat-icon>
+    <!-- Botón de notificaciones (solo visible para CLIENT) -->
+    <button 
+        *ngIf="isClientRole()" 
+        style="margin: 4px;" 
+        mat-icon-button 
+        class="example-icon" 
+        matTooltip="Notificaciones"
+        routerLink="/client/client-panel/notifications"
+        routerLinkActive="active-notification">
+        <mat-icon>notifications</mat-icon>
     </button>
-<!-- 
-    esto va en el boton de importar -> (click)="fileInput.click()"
-    <input #fileInput 
-        type="file" 
-        style="display: none;" 
-        (change)="importar($event)" />    
--->
 
-
-
+    <button 
+        style="margin: 4px;" 
+        mat-icon-button 
+        class="example-icon favorite-icon" 
+        matTooltip="Cerrar sesión" 
+        (click)="exitApp()">
+        <mat-icon>logout</mat-icon>
+    </button>
+    
 </mat-toolbar>

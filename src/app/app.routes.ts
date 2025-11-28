@@ -7,6 +7,8 @@ import { ClientPanel } from './features/users/client/client-panel/client-panel';
 import { ErosionMap } from './features/users/client/erosion-map/erosion-map';
 import { UserResetPassword } from './features/users/core/components/user-reset-password/user-reset-password';
 import { DevicesManagement } from './features/users/admin/components/devices-management/devices-management';
+import { NotificationsPanel } from './features/users/client/notifications-panel/notifications-panel';
+import { KpisPanel } from './features/users/client/kpis-panel/kpis-panel';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -28,7 +30,9 @@ export const routes: Routes = [
         children: [
             { path: 'client-panel', component: ClientPanel,
                 children: [
-                    { path: 'erosion-map', component: ErosionMap }
+                    { path: 'erosion-map', component: ErosionMap },
+                    { path: 'notifications', component: NotificationsPanel },
+                    { path: 'kpis', component: KpisPanel }
                 ]
             }
         ]

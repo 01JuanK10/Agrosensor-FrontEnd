@@ -1,0 +1,233 @@
+<!-- src/app/features/users/client/kpis-panel/kpis-panel.html -->
+<div class="kpis-container">
+  <h2 class="page-title-2 mb-4">Dashboard - Monitoreo de Suelos</h2>
+
+  <!-- KPIs Cards -->
+  @if (stats(); as statistics) {
+    <section class="stats-section mb-4">
+      <div class="stats-grid">
+        <!-- Mediciones Totales -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon total">
+              <mat-icon>assessment</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.totalMeasurements }}</h3>
+              <p>Mediciones Totales</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Iluminación Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon light">
+              <mat-icon>wb_sunny</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageIluminance }}%</h3>
+              <p>Iluminación Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Humedad del Suelo Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon moisture">
+              <mat-icon>opacity</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageSoilMoisture }}%</h3>
+              <p>Humedad del Suelo Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Temperatura Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon temperature">
+              <mat-icon>thermostat</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageTemperature }}°C</h3>
+              <p>Temperatura Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Humedad Ambiental Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon env-moisture">
+              <mat-icon>water_drop</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageEnvironmentMoisture }}%</h3>
+              <p>Humedad Ambiental Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Erosión Promedio -->
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon erosion">
+              <mat-icon>terrain</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h3>{{ statistics.averageErosion }}%</h3>
+              <p>Erosión Promedio</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <section class="charts-section">
+
+      <!-- Comparación de KPIs por Dispositivo -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Comparación de Medidas por Dispositivo</mat-card-title>
+          <mat-card-subtitle>
+            Humedad, Temperatura y Erosión por Sensor
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <canvas id="kpiComparisonChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Distribución de Estados del Cultivo -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Salud General del Cultivo</mat-card-title>
+          <mat-card-subtitle>
+            Distribución por estado de medición
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <canvas id="healthStatusChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+
+    </section>
+
+  }
+
+  <!-- Data Table -->
+  <section class="data-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Datos de Mediciones</mat-card-title>
+        <mat-card-subtitle>
+          Información detallada de todos los sensores
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="table-container">
+          <table mat-table [dataSource]="measurements()" class="measurements-table">
+            
+            <!-- Columna Dispositivo -->
+            <ng-container matColumnDef="device">
+              <th mat-header-cell *matHeaderCellDef>Dispositivo</th>
+              <td mat-cell *matCellDef="let measurement">
+                <div class="device-info">
+                  <strong>{{ measurement.device.id }}</strong>
+                  <small>{{ measurement.device.location.address }}</small>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Columna Fecha -->
+            <ng-container matColumnDef="dateTime">
+              <th mat-header-cell *matHeaderCellDef>Fecha/Hora</th>
+              <td mat-cell *matCellDef="let measurement">
+                {{ measurement.dateTime | date: 'short' }}
+              </td>
+            </ng-container>
+
+            <!-- Columna Iluminación del Suelo -->
+            <ng-container matColumnDef="soilIluminance">
+              <th mat-header-cell *matHeaderCellDef>Iluminación Suelo</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.soilIluminance.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Humedad del Suelo -->
+            <ng-container matColumnDef="soilMoisture">
+              <th mat-header-cell *matHeaderCellDef>Humedad Suelo</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.soilMoisture.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Temperatura Ambiente -->
+            <ng-container matColumnDef="environmentTemperature">
+              <th mat-header-cell *matHeaderCellDef>Temp. Ambiente</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.environmentTemperature.toFixed(1) }}°C
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Humedad Ambiente -->
+            <ng-container matColumnDef="environmentMoisture">
+              <th mat-header-cell *matHeaderCellDef>Hum. Ambiente</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span class="measurement-value">
+                  {{ measurement.environmentMoisture.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Erosión -->
+            <ng-container matColumnDef="erosion">
+              <th mat-header-cell *matHeaderCellDef>Erosión</th>
+              <td mat-cell *matCellDef="let measurement">
+                <span 
+                  class="erosion-value"
+                  [style.color]="getErosionColor(measurement.erosion)">
+                  {{ measurement.erosion.toFixed(1) }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Columna Estado -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let measurement">
+                <mat-chip 
+                  [class]="'status-chip ' + getStatusColor(measurement)">
+                  <mat-icon>{{ getStatusIcon(measurement) }}</mat-icon>
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          @if (measurements().length === 0) {
+            <div class="no-data">
+              <mat-icon>info</mat-icon>
+              <p>No hay datos disponibles</p>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

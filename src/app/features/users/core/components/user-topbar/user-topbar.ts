@@ -1,15 +1,24 @@
 import { Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from "@angular/router";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 import { MenuToggle } from '../../services/menu-toggle';
 import { AuthService } from '../../../../auth/service/auth-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-topbar',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatTooltipModule, RouterLink],
+  imports: [
+    MatToolbarModule, 
+    MatButtonModule, 
+    MatIconModule, 
+    MatTooltipModule, 
+    RouterLink, 
+    RouterLinkActive,
+    CommonModule
+  ],
   templateUrl: './user-topbar.html',
   styleUrl: './user-topbar.scss',
 })
@@ -24,5 +33,9 @@ export class UserTopbar {
 
   exitApp(): void {
     this.auth.logout();
+  }
+
+  isClientRole(): boolean {
+    return sessionStorage.getItem('user_role') === 'CLIENT';
   }
 }
