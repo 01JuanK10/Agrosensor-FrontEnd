@@ -1,4 +1,4 @@
-$color-primary: #fbbe24f1; // Amarillo suave
+$color-primary: #fbbe24b2; // Amarillo suave
 $color-accent: #F59E0B; // Naranja intenso
 $color-dark: #374151; // Gris oscuro / texto principal
 $color-light: #ffffff; // Fondo claro / crema
@@ -8,8 +8,8 @@ $color-light: #ffffff; // Fondo claro / crema
 }
 
 mat-toolbar {
-  background: $color-primary !important;
-  border-bottom: 1px solid darken($color-primary, 10%) !important;
+  background: $color-light !important;
+  border-bottom: 1px solid darken($color-light, 10%) !important;
   position: relative;
   z-index: 5;
 }
