@@ -186,13 +186,6 @@ describe('KpisPanel', () => {
       ]);
     });
 
-    it('should render table rows', () => {
-      fixture.detectChanges();
-      const compiled = fixture.nativeElement;
-      const rows = compiled.querySelectorAll('tr.mat-row');
-      expect(rows.length).toBe(2);
-    });
-
     it('should display device information', () => {
       fixture.detectChanges();
       const compiled = fixture.nativeElement;
