@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DeviceForm } from '../../forms/device-form/device-form';
-import { Device } from '../../../../../domain/Device';
+import { Device } from '../../../../../../models/device.model';
 
 @Component({
   selector: 'app-device-dialog',

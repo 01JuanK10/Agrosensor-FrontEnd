@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-delete-device-dialog',
@@ -9,9 +9,15 @@ import { MatDialogModule } from '@angular/material/dialog';
   styleUrl: './delete-device-dialog.scss',
 })
 export class DeleteDeviceDialog {
-  @Input() deviceMac: string = '';
+  @Input() deviceId: string = '';
 
-  deleteDevice(porcinoId: string){
-    console.log(`id del porcino a eliminar ${porcinoId}`);
+  constructor(private dialogRef: MatDialogRef<DeleteDeviceDialog>) { }
+
+  deleteDevice() {
+    if (!this.deviceId) {
+      console.error('ERROR en DeleteDeviceDialog: Los datos inyectados son inválidos o falta el ID.');
+    }
+    console.log(`id del dispositivo a eliminar ${ this.deviceId } `);
+    this.dialogRef.close(this.deviceId);
   }
 }

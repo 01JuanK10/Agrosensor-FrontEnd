@@ -9,38 +9,38 @@
 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
 
-        <ng-container matColumnDef="MAC">
+        <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> MAC </th>
-            <td mat-cell *matCellDef="let row"> {{ row.mac }} </td>
+            <td mat-cell *matCellDef="let row"> {{ row.id }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="Tipo">
+        <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
-            <td mat-cell *matCellDef="let row"> {{ row.tipo }} </td>
+            <td mat-cell *matCellDef="let row"> {{ row.type }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="Ubicación">
+        <ng-container matColumnDef="location">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Ubicación </th>
-            <td mat-cell *matCellDef="let row"> {{ row.ubicacion }}</td>
+            <td mat-cell *matCellDef="let row"> {{ row.location.address }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="Estado">
+        <ng-container matColumnDef="active">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-            <td mat-cell *matCellDef="let row"> {{ row.estado }} </td>
+            <td mat-cell *matCellDef="let row"> {{ row.active }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="Cliente">
+        <ng-container matColumnDef="client">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
-            <td mat-cell *matCellDef="let row"> {{ row.cliente || 'Por definir' }} </td>
+            <td mat-cell *matCellDef="let row"> {{ row.client.name || 'Por definir' }} </td>
         </ng-container>
 
         <ng-container matColumnDef="Acciones">
             <th mat-header-cell *matHeaderCellDef> Acciones </th>
             <td mat-cell *matCellDef="let row">
-                <button matIconButton class="example-icon" matTooltip="Editar" (click)="abrirEditar(row.mac)">
+                <button matIconButton class="example-icon" matTooltip="Editar" (click)="abrirEditar(row.id)">
                     <mat-icon style="color: #87CEEB;">edit</mat-icon>
                 </button>
-                <button matIconButton class="example-icon" matTooltip="Eliminar" (click)="abrirEliminar(row.mac)">
+                <button matIconButton class="example-icon" matTooltip="Eliminar" (click)="abrirEliminar(row.id)">
                     <mat-icon style="color: #E07B6D;">delete</mat-icon>
                 </button>
             </td>

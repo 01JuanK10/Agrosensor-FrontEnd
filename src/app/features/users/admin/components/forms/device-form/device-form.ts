@@ -1,12 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Device } from '../../../../../domain/Device';
 import { User } from '../../../../../domain/User';
 import { DeviceTypes } from '../../../../../domain/DeviceTypes';
+import { Device } from '../../../../../../models/device.model';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DeviceDialog } from '../../dialogs/device-dialog/device-dialog';
 
 @Component({
   selector: 'app-device-form',
@@ -17,56 +19,78 @@ import { DeviceTypes } from '../../../../../domain/DeviceTypes';
 export class DeviceForm implements OnInit {
   deviceForm!: FormGroup;
   newDevice: boolean = true;
-  types: DeviceTypes[];
-  clients: User[];
+
   @Input() deviceData: Device | null = null;
 
-    constructor(private fb: FormBuilder) {
-    this.clients = [
-      new User(1, 1234567890, 'Camilo', 'Alzate', 'camilo@example.com', 'camilo.alzate', 'password123', 'ADMIN'),
-      new User(2, 9876543210, 'Laura', 'Gómez', 'laura@example.com', 'laura.gomez', 'password123', 'CLIENT'),
-      new User(3, 1122334455, 'Carlos', 'Pérez', 'carlos@example.com', 'carlos.perez', 'password123', 'CLIENT'),
-      new User(4, 5566778899, 'Sofía', 'Ramírez', 'sofia@example.com', 'sofia.ramirez', 'password123', 'CLIENT'),
-      new User(5, 9988776655, 'Andrés', 'Torres', 'andres@example.com', 'andres.torres', 'password123', 'ADMIN'),
-    ];
-    this.types = Object.values(DeviceTypes);
-
-  }
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<DeviceDialog>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.deviceForm = this.fb.group({
-      mac: ['', Validators.required],
-      types: ['', Validators.required],
-      ubication: ['', [Validators.required, Validators.min(0)]],
-      cliente: [null]
+      id: [''],
+      type: ['', Validators.required],
+      active: [true, Validators.required],
+      //Datos ubicación
+      location: this.fb.group({
+        locationId: [''],
+        latitude: ['', Validators.required],
+        longitude: ['', Validators.required],
+        address: ['', Validators.required]
+      }),
+
+      //Datos cliente
+      client: this.fb.group({
+        id: [''],
+        cc: ['', Validators.required]
+      })
+
     });
     console.log("Datos del dispositivo recibidos en el formulario:", this.deviceData);
     if (this.deviceData) {
       this.newDevice = false;
       this.deviceForm.patchValue({
-        mac: this.deviceData.mac,
-        types: this.deviceData.tipo,
-        ubication: this.deviceData.ubicacion,
-        cliente: this.deviceData.cliente
+        id: this.deviceData.id,
+        type: this.deviceData.type,
+        active: this.deviceData.active,
+        location: {
+          locationId: this.deviceData.location.id,
+          latitude: this.deviceData.location.latitude,
+          longitude: this.deviceData.location.longitude,
+          address: this.deviceData.location.address
+        },
+        client: {
+          id: this.deviceData.client.id,
+          cc: this.deviceData.client.cc
+        }
       });
     }
   }
 
-    onSubmit(): void {
-    if (this.deviceForm.valid) {
-      const device: Device = this.deviceForm.value;
-      if(this.newDevice){
-        console.log(`nuevo dispositivo = ${device}`)
-      }else{
-        console.log(`dispositivo existente = ${device}`)
-      }
-    } else {
+  onSubmit(): void {
+    if (!this.deviceForm.valid) {
       console.log('Formulario inválido');
+      return;
     }
-  }
 
-  compareClientes(c1: User, c2: User): boolean {
-    return c1 && c2 ? c1.cc === c2.cc : c1 === c2;
+    const form = this.deviceForm.value;
+
+    const device: Device = {
+      id: form.id,
+      type: form.type,
+      active: form.active,
+      location: {
+        id: form.location.locationId,
+        latitude: form.location.latitude,
+        longitude: form.location.longitude,
+        address: form.location.address
+      },
+      client: {
+        id: form.client.id,
+        cc: form.client.cc
+      }
+    };
+    console.log("Dispositivo enviado: ", device);
+    this.dialogRef.close(device);
+    //(window as any).deviceFormSubmit = device;
   }
 
 }
