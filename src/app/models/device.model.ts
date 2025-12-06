@@ -1,13 +1,3 @@
-/*export class Device {
-    constructor(
-        public mac: string,
-        public tipo: string,
-        public ubicacion: string,
-        public estado: boolean,
-        public cliente: string
-    ) {}
-}*/
-
 export interface DeviceLocation {
   id: number;
   latitude: number;
@@ -18,8 +8,6 @@ export interface DeviceLocation {
 export interface DeviceClient {
   id: number;
   cc: number;
-  name: string;
-  lastname: string;
 }
 
 export interface Device {
