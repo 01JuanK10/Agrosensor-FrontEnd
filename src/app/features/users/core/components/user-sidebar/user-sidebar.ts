@@ -7,6 +7,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MenuToggle } from '../../services/menu-toggle';
+import { ProfileUpdateService } from '../../../../services/profile-update-service';
 
 
 export type MenuItem = {
@@ -24,6 +25,7 @@ export type MenuItem = {
 export class UserSidebar {
   @ViewChild('snav') snav!: MatSidenav;
   menuToggleService = inject(MenuToggle);
+  profileUpdateService = inject(ProfileUpdateService);
 
   collapsed = signal(true);
   sidenavWidth: string = '250px';
@@ -32,12 +34,16 @@ export class UserSidebar {
   name = 'usuario';
   role = 'usuario'
   
+  updateName = computed<string | null> (() => {
+    return this.profileUpdateService.userState();
+  });
+  
   ngOnInit(): void {
     this.menuToggleService.toggle$.subscribe(() => {
       this.collapsedElements(this.collapsed());
     });
 
-    this.name = sessionStorage.getItem('name') || 'Usuario';
+    this.name = this.updateName() || 'Usuario';
 
     if(sessionStorage.getItem('user_role') === 'CLIENT'){
       this.role = 'Cliente';
@@ -92,10 +98,10 @@ export class UserSidebar {
       route: 'devices'
     },
     {
-      icon: 'analytics',
-      label: 'Analíticas',
-      route: 'analytics'
-    }
+      icon: 'person',
+      label: 'Información Usuario',
+      route: 'user'
+    },
   ]);
 
   getMenuItemsByRole(): MenuItem[] {

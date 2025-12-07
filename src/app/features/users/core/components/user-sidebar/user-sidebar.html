@@ -4,7 +4,7 @@
             <img src="assets/logo-github-white.png" alt="no" [style.width]="profilePictureSize" [style.height]="profilePictureSize" style="margin: 20px 0px;">
             <div class="header-text" style="margin: 20px 0px">
                 <h2 [style.display]="showText">{{ role }}</h2>
-                <p [style.display]="showText" style=" font-size: medium">{{ name }}</p>
+                <p [style.display]="showText" style=" font-size: medium">{{ updateName() }}</p>
             </div>
             <hr style="border: 1.25px solid  #374151; margin: 0 20px;">
         </div>
