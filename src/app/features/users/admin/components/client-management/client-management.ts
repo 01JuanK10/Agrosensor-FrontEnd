@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { User } from '../../../../domain/User';
 import { UserDialog } from '../dialogs/user-dialog/user-dialog';
 import { ClientService } from '../../../../services/client-service';
+import { DeleteUserDialog } from '../dialogs/delete-user-dialog/delete-user-dialog';
 
 @Component({
   selector: 'app-client-management',
@@ -38,7 +39,6 @@ export class ClientManagement {
   }
 
     loadClients(): void {
-      console.log("implementacion pendiente");
       this.clientService.findAllClients().subscribe({
         next: (data) => {
           this.users = data;
@@ -95,8 +95,29 @@ export class ClientManagement {
     }
 
     abrirEliminar(id: number) {
-      console.log("Eliminar cliente con ID: ", id);
-      // Lógica para eliminar el cliente
+      console.log('ID recibido en el componente padre antes de abrir el diálogo:', id);
+      if (!id) {
+        console.error('ERROR: No se pudo obtener el ID del dispositivo para eliminar.');
+        return;
+      }
+      const dialogRef = this.dialog.open(DeleteUserDialog);
+      dialogRef.componentInstance.clientId = id;
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.clientService.deleteClient(id).subscribe({
+            next: () => {
+              console.log("Cliente eliminado correctamente");
+              this.loadClients();
+            },
+            error: (err) => {
+              console.log("Error eliminando cliente", err);
+            }
+          })
+          //this.loadDevices();
+        }
+        console.log(`Dialog result: ${result}`);
+      });
     }
 
 }

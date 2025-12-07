@@ -2,7 +2,7 @@
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { ClientResponse, TokenResponse, User } from '../domain/User';
 import { environment } from '../../../environments/environment';
 
@@ -81,5 +81,30 @@ export class ClientService {
         // El cuerpo de la petición es el objeto User (que coincide con RegisterRequest)
         // Se asume que el backend espera el objeto completo del User.
         return this.http.post<TokenResponse>(this.REGISTER_ENDPOINT, request, { headers });
+    }
+
+    // ----------------------------------------------------------------------
+    // 3. Nuevo método para eliminar un cliente (DELETE) 🗑️
+    // Spring Controller: @DeleteMapping("/{cc}") -> /api/users/clients/{cc}
+    // ----------------------------------------------------------------------
+    
+    /**
+     * Realiza una petición DELETE para eliminar un cliente por su número de cédula (cc).
+     * Requiere el token de autenticación.
+     * @param cc La cédula del cliente a eliminar.
+     * @returns Observable<void> (El backend responde con 204 No Content)
+     */
+public deleteClient(cc: number): Observable<void> {
+        const headers = this.getAuthHeaders();
+
+        if (!headers) {
+            console.error('ERROR RxJS: Token de autenticación requerido para DELETE.');
+            
+            return throwError(() => new Error('Token de autenticación requerido.'));
+        }
+
+        const deleteUrl = `${this.CLIENTS_ENDPOINT}/${cc}`;
+
+        return this.http.delete<void>(deleteUrl, { headers });
     }
 }
