@@ -8,8 +8,11 @@
 
     <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Tipo</mat-label>
-        <input matInput formControlName="type"
-            placeholder="Ej: esp32, sensor-agua">
+        <mat-select formControlName="type">
+            @for (tipo of types; track $index) {
+                <mat-option [value]="tipo">{{ tipo }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 mb-3">

@@ -75,11 +75,6 @@ export class UserSidebar {
     },
     {
       icon: 'analytics',
-      label: 'Analíticas',
-      route: 'analytics'
-    },
-    {
-      icon: 'analytics',
       label: 'Dashboard',
       route: 'kpis'
     }

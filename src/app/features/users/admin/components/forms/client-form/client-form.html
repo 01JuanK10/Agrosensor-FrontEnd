@@ -1,0 +1,48 @@
+<form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="p-4">
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>CC</mat-label>
+        <input matInput formControlName="cc" placeholder="Documento de identidad" type="number">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name"
+            placeholder="Ej: Juan Pérez">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="lastname"
+            placeholder="Ej: Pérez">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email"
+            placeholder="Ej: example@example.com">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Nombre de usuario</mat-label>
+        <input matInput formControlName="username"
+            placeholder="Ej: juan.perez">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Contraseña</mat-label>
+        <input matInput formControlName="password" type="password"
+            placeholder="Ej: juan.perez">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="role">
+            <mat-option [value]="'CLIENT'">Cliente</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">
+        Enviar información
+    </button>
+</form>

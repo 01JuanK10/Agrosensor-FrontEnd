@@ -19,6 +19,7 @@ import { DeviceDialog } from '../../dialogs/device-dialog/device-dialog';
 export class DeviceForm implements OnInit {
   deviceForm!: FormGroup;
   newDevice: boolean = true;
+  types = Object.values(DeviceTypes);
 
   @Input() deviceData: Device | null = null;
 

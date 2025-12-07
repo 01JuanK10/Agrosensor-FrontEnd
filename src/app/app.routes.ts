@@ -9,6 +9,7 @@ import { UserResetPassword } from './features/users/core/components/user-reset-p
 import { DevicesManagement } from './features/users/admin/components/devices-management/devices-management';
 import { NotificationsPanel } from './features/users/client/notifications-panel/notifications-panel';
 import { KpisPanel } from './features/users/client/kpis-panel/kpis-panel';
+import { ClientManagement } from './features/users/admin/components/client-management/client-management';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ export const routes: Routes = [
         children: [
             { path: 'admin-panel', component: AdminPanel, 
                 children: [
+                    {path: 'users', component: ClientManagement},
                     {path: 'devices', component: DevicesManagement }
                 ]
             }
