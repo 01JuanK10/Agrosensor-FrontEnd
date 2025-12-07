@@ -8,11 +8,10 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-//import { Device } from '../../../../domain/Device';
+import { Device } from '../../../../domain/Device';
 import { DeviceDialog } from '../dialogs/device-dialog/device-dialog';
 import { DeleteDeviceDialog } from '../dialogs/delete-device-dialog/delete-device-dialog';
 import { DeviceService } from '../../../../services/device.service';
-import { Device } from '../../../../../models/device.model';
 
 @Component({
   selector: 'app-devices-management',
@@ -41,6 +40,7 @@ export class DevicesManagement {
   }
 
   loadDevices(): void {
+    
     this.deviceService.getDevices().subscribe({
       next: (data) => {
         this.devices = data;
@@ -63,7 +63,7 @@ export class DevicesManagement {
         case 'location': return item.location.address;
         case 'active': return item.active ? 'Activo' : 'Inactivo';
         //case 'client': return item.client.name + ' ' + item.client.lastname;
-        case 'client': return item.client.cc;
+        case 'client': return item.client;
         default: return (item as any)[property];
       }
     };

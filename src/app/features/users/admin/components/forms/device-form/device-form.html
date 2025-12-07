@@ -40,13 +40,15 @@
         </mat-form-field>
     </div>
 
-    <div formGroupName="client">
-
-        <mat-form-field appearance="outline" class="w-100 mb-3">
-            <mat-label>Cédula</mat-label>
-            <input matInput formControlName="cc" type="number">
-        </mat-form-field>
-    </div>
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label> Cliente</mat-label>
+        <mat-select formControlName="client" [compareWith]="compareClientes">
+            <mat-option [value]="null">Sin asignar</mat-option>
+            @for (client of clients; track $index) {
+                <mat-option [value]="client">{{ client.name }} {{client.lastname}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
 
     <button mat-raised-button color="primary" type="submit">
         Enviar información
