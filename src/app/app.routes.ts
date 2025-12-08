@@ -9,6 +9,8 @@ import { UserResetPassword } from './features/users/core/components/user-reset-p
 import { DevicesManagement } from './features/users/admin/components/devices-management/devices-management';
 import { NotificationsPanel } from './features/users/client/notifications-panel/notifications-panel';
 import { KpisPanel } from './features/users/client/kpis-panel/kpis-panel';
+import { ClientManagement } from './features/users/admin/components/client-management/client-management';
+import { UserProfileComponent } from './features/users/core/components/user-profile-component/user-profile-component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,7 +21,9 @@ export const routes: Routes = [
         children: [
             { path: 'admin-panel', component: AdminPanel, 
                 children: [
-                    {path: 'devices', component: DevicesManagement }
+                    { path: 'user', component: UserProfileComponent },
+                    { path: 'users', component: ClientManagement },
+                    { path: 'devices', component: DevicesManagement }
                 ]
             }
         ]
@@ -30,6 +34,7 @@ export const routes: Routes = [
         children: [
             { path: 'client-panel', component: ClientPanel,
                 children: [
+                    { path: 'user', component: UserProfileComponent },
                     { path: 'erosion-map', component: ErosionMap },
                     { path: 'notifications', component: NotificationsPanel },
                     { path: 'kpis', component: KpisPanel }

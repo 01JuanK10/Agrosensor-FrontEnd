@@ -1,12 +1,4 @@
-/*export class Device {
-    constructor(
-        public mac: string,
-        public tipo: string,
-        public ubicacion: string,
-        public estado: boolean,
-        public cliente: string
-    ) {}
-}*/
+import { User } from "./User";
 
 export interface DeviceLocation {
   id: number;
@@ -15,17 +7,10 @@ export interface DeviceLocation {
   address: string;
 }
 
-export interface DeviceClient {
-  id: number;
-  cc: number;
-  name: string;
-  lastname: string;
-}
-
 export interface Device {
   id: string;
   type: string;
   active: boolean;
   location: DeviceLocation;
-  client: DeviceClient;
+  client: User | null;
 }

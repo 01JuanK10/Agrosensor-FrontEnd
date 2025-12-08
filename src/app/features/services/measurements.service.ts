@@ -27,8 +27,9 @@ export interface SoilMeasurement {
   providedIn: 'root'
 })
 export class MeasurementsService {
+  private cc = sessionStorage.getItem('cc') ? parseInt(sessionStorage.getItem('cc')!, 10) : 0;
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/measurements/soil`;
+  private apiUrl = `${environment.apiUrl}/api/measurements/soil/${this.cc}`;
 
   /**
    * Obtiene todas las mediciones del suelo

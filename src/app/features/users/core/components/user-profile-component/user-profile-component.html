@@ -1,0 +1,78 @@
+<div class="profile-container p-4">
+  <h2 class="mb-4">Editar Perfil</h2>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (dataLoading()) {
+    <p class="loading-text">Cargando información del perfil...</p>
+  } 
+  
+  @if (!dataLoading() && currentUser && profileForm) {
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>CC (Cédula)</mat-label>
+        <input matInput [value]="currentUser.cc" disabled>
+        <mat-hint>Este campo no se puede modificar.</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Rol</mat-label>
+        <input matInput [value]="currentUser.role" disabled>
+        <mat-hint>Tu rol es asignado por el sistema.</mat-hint>
+      </mat-form-field>
+
+      <hr class="my-4">
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name">
+        </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="lastname">
+        </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Nombre de usuario</mat-label>
+        <input matInput formControlName="username">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="Ej: example@example.com">
+        @if (profileForm.get('email')?.errors?.['email'] && profileForm.get('email')?.touched) {
+          <mat-error>Ingrese un correo válido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Nueva Contraseña</mat-label>
+        <input matInput formControlName="password" type="password" placeholder="Dejar en blanco para mantener la actual">
+        @if (profileForm.get('password')?.errors?.['minlength']) {
+          <mat-error>La contraseña debe tener al menos 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" 
+              [disabled]="profileForm.invalid || loading() || profileForm.pristine">
+        @if (loading()) {
+          Guardando...
+        } @else {
+          Actualizar Información
+        }
+      </button>
+    </form>
+  }
+</div>

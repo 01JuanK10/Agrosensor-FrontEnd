@@ -1,3 +1,3 @@
 export enum DeviceTypes {
-    ESP32 = 'ESP32'
+    ESP32 = 'esp32'
 }
