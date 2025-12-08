@@ -94,12 +94,12 @@ export class UserProfileComponent implements OnInit {
     // Esto imita el comportamiento de la contraseña, donde solo el cambio dispara la inclusión.
 
     // Nombre
-    if (formValues.name !== this.currentUser.name) {
+    if (formValues.name && this.currentUser.name.trim() !== '') {
       updates.name = formValues.name;
     }
 
     // Apellido
-    if (formValues.lastname !== this.currentUser.lastname) {
+    if (formValues.lastname && this.currentUser.lastname.trim() !== '') {
       updates.lastname = formValues.lastname;
     }
 

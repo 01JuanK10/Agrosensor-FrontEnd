@@ -8,7 +8,10 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+<<<<<<< HEAD
 import { Device } from '../../../../domain/Device';
+=======
+>>>>>>> dd36ea673312361230539d116238661599f32c8c
 import { DeviceDialog } from '../dialogs/device-dialog/device-dialog';
 import { DeleteDeviceDialog } from '../dialogs/delete-device-dialog/delete-device-dialog';
 import { DeviceService } from '../../../../services/device.service';

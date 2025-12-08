@@ -43,6 +43,7 @@ export class UserSidebar {
       this.collapsedElements(this.collapsed());
     });
 
+    this.profileUpdateService.updateUser(sessionStorage.getItem('name'));
     this.name = this.updateName() || 'Usuario';
 
     if(sessionStorage.getItem('user_role') === 'CLIENT'){
