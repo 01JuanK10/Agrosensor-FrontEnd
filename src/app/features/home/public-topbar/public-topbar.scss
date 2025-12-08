@@ -1,4 +1,108 @@
-@use "./../../../../styles.scss";
+@use 'sass:color';
+@use '@angular/material' as mat;
+
+/* ===== Angular Material Theme ===== */
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* ===== Paleta de colores ===== */
+$color-primary: #FBBF24; // Amarillo suave
+$color-accent: #F59E0B; // Naranja intenso
+$color-dark: #374151; // Gris oscuro / texto principal
+$color-light: #FEFBEB; // Fondo claro / crema
+
+/* ===== Estilos de títulos ===== */
+.page-title-1 {
+  text-align: center;
+  font-size: 2.5rem; /* ~40px */
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: rgb(34, 34, 34);
+  letter-spacing: 0.5px;
+}
+
+.page-title-2 {
+  text-align: center;
+  font-size: 2rem; /* ~32px */
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: rgb(45, 45, 45);
+}
+
+.page-title-3 {
+  text-align: center;
+  font-size: 1.75rem; /* ~28px */
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: rgb(55, 55, 55);
+}
+
+.page-title-4 {
+  text-align: center;
+  font-size: 1.5rem; /* ~24px */
+  font-weight: 500;
+  margin-bottom: 18px;
+  color: rgb(65, 65, 65);
+}
+
+.page-title-5 {
+  text-align: center;
+  font-size: 1.25rem; /* ~20px */
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: rgb(75, 75, 75);
+}
+
+.page-title-6 {
+  text-align: center;
+  font-size: 1.1rem; /* ~18px */
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: rgb(90, 90, 90);
+}
+
+/* ===== Botón primario ===== */
+.btn-primary {
+  background-color: $color-accent !important;
+  border-color: #F59E0B !important;
+  color: white !important;
+  height: 40px;
+
+  &:hover {
+    background-color: color.scale($color-accent, $lightness: -5%);
+  }
+
+  &:disabled {
+    background-color: color.scale($color-accent, $lightness: 10%);
+    cursor: not-allowed;
+  }
+}
 
 .nowrap-text {
     white-space: nowrap;
