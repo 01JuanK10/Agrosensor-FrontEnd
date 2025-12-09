@@ -21,6 +21,7 @@ export class ErosionMap implements OnInit, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
 
   private map: any;
+  private L: any;
   erosionPoints = signal<ErosionPoint[]>([]);
 
   private apiUrl = `${environment.apiUrl}/api/map/erosion-points`;
@@ -30,49 +31,61 @@ export class ErosionMap implements OnInit, AfterViewInit {
       const cedula = Number(sessionStorage.getItem('cc'));
       this.loadErosionData(cedula);
     }
-    
   }
 
   async ngAfterViewInit(): Promise<void> {
     if (isPlatformBrowser(this.platformId)) {
-      const L = await import('leaflet');
+      await this.initializeMapAndLeaflet();
 
-      this.map = L.map('map', {
-        center: [6.25184, -75.56359],
-        zoom: 6,
-      });
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-      }).addTo(this.map);
-
-      setTimeout(() => {
-        this.map.invalidateSize();
-      }, 200);
-
+      const currentData = this.erosionPoints();
+      if (currentData.length > 0) {
+        this.updateMap(currentData);
+      }
     }
+  }
+
+  private async initializeMapAndLeaflet(): Promise<void> {
+    if (this.map && this.L) return;
+
+    this.L = await import('leaflet');
+
+    this.map = this.L.map('map', {
+      center: [6.25184, -75.56359],
+      zoom: 6,
+    });
+
+    this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    }).addTo(this.map);
+
+    setTimeout(() => {
+      if (this.map) this.map.invalidateSize();
+    }, 200);
   }
 
   private loadErosionData(cedula: number): void {
     const token = sessionStorage.getItem('auth_token');
-    
+
     this.http.get<ErosionPoint[]>(`${this.apiUrl}/${cedula}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: async (data) => {
-        this.erosionPoints.set(data);
-        if (data.length > 0 && isPlatformBrowser(this.platformId)) {
-          const L = await import('leaflet');
-          this.updateMap(L, data);
+        const points = Array.isArray(data) ? data : [];
+        this.erosionPoints.set(points);
+
+        if (points.length > 0 && isPlatformBrowser(this.platformId)) {
+          await this.initializeMapAndLeaflet();
+          this.updateMap(points);
         }
       },
       error: (err) => console.error('Error fetching erosion data:', err),
     });
   }
 
+  private updateMap(points: ErosionPoint[]): void {
+    if (!this.map || !this.L || !points || points.length === 0) return;
 
-  private updateMap(L: any, points: ErosionPoint[]): void {
     this.map.eachLayer((layer: any) => {
       if (!layer._url) this.map.removeLayer(layer);
     });
@@ -83,7 +96,7 @@ export class ErosionMap implements OnInit, AfterViewInit {
     points.forEach((point) => {
       const color = this.getErosionColor(point.erosion);
 
-      const circle = L.circleMarker([point.latitude, point.longitude], {
+      const circle = this.L.circleMarker([point.latitude, point.longitude], {
         radius: 10,
         fillColor: color,
         color: color,
@@ -94,7 +107,7 @@ export class ErosionMap implements OnInit, AfterViewInit {
       const popupContent = `
         <div class="popup">
           <h3>${point.address}</h3>
-          <p><strong>Erosión:</strong> 
+          <p><strong>Erosión:</strong>
             <span style="color:${color}">
               ${point.erosion.toFixed(1)}
             </span>
@@ -106,6 +119,10 @@ export class ErosionMap implements OnInit, AfterViewInit {
   }
 
   private calculateCenter(points: ErosionPoint[]): { lat: number; lng: number } {
+    if (!points || points.length === 0) {
+      return { lat: 6.25184, lng: -75.56359 };
+    }
+
     const avgLat = points.reduce((sum, p) => sum + p.latitude, 0) / points.length;
     const avgLng = points.reduce((sum, p) => sum + p.longitude, 0) / points.length;
     return { lat: avgLat, lng: avgLng };
@@ -115,8 +132,8 @@ export class ErosionMap implements OnInit, AfterViewInit {
     const LOW_MAX = 35.0;
     const MODERATE_MAX = 60.0;
 
-    if (value < LOW_MAX) return '#22c55e'; // Verde
-    if (value < MODERATE_MAX) return '#facc15'; // Amarillo
-    return '#ef4444'; // Rojo
+    if (value < LOW_MAX) return '#22c55e';
+    if (value < MODERATE_MAX) return '#facc15';
+    return '#ef4444';
   }
 }
