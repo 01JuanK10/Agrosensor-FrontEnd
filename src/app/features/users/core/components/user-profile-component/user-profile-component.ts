@@ -79,73 +79,58 @@ export class UserProfileComponent implements OnInit {
   }
 
   // 🚀 LÓGICA DE ACTUALIZACIÓN MODIFICADA
-  onSubmit(): void {
-    // Verificamos que el formulario sea válido y que el usuario esté cargado
-    if (this.profileForm.invalid || !this.currentUser || !this.currentUser.cc) return;
+// ... (código anterior)
 
-    this.loading.set(true);
-    this.errorMessage.set(null);
-    this.successMessage.set(null);
+  // 🚀 LÓGICA DE ACTUALIZACIÓN CORREGIDA
+  onSubmit(): void {
+    // Verificamos que el formulario sea válido y que el usuario esté cargado
+    if (this.profileForm.invalid || !this.currentUser || !this.currentUser.cc) return;
 
-    const formValues = this.profileForm.value;
-    const updates: any = {};
+    this.loading.set(true);
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
 
-    // 🔑 Lógica PATCH: Solo se incluyen los campos si el valor actual del formulario DIFIERE del valor original del currentUser.
-    // Esto imita el comportamiento de la contraseña, donde solo el cambio dispara la inclusión.
+    const formValues = this.profileForm.value;
+    const updates: any = {};
 
-    // Nombre
-    if (formValues.name && this.currentUser.name.trim() !== '') {
-      updates.name = formValues.name;
-    }
+    // 🟢 FUNCIÓN DE AYUDA: Asegura que el valor sea string, incluso si es null/undefined
+    const safeString = (value: string | null | undefined): string => 
+        (value ?? '').toString().trim();
 
-    // Apellido
-    if (formValues.lastname && this.currentUser.lastname.trim() !== '') {
-      updates.lastname = formValues.lastname;
-    }
 
-    // Email
-    if (formValues.email && this.currentUser.email.trim() !== '') {
-      updates.email = formValues.email;
-    }
+    // 🔑 Lógica PATCH: Solo se incluyen los campos si el valor actual del formulario DIFIERE del valor original.
 
-    // Nombre de Usuario
-    if (formValues.username && this.currentUser.username.trim() !== '') {
-      updates.username = formValues.username;
-    }
+    // Nombre
+    if (formValues.name && formValues.name.trim() !== safeString(this.currentUser.name)) {
+      updates.name = formValues.name;
+    }
 
-    // Contraseña (lógica ya existente)
-    if (formValues.password && formValues.password.trim() !== '') {
-      updates.password = formValues.password;
-    }
+    // Apellido
+    if (formValues.lastname && formValues.lastname.trim() !== safeString(this.currentUser.lastname)) {
+      updates.lastname = formValues.lastname;
+    }
 
-    if (Object.keys(updates).length === 0) {
-      this.successMessage.set("No se detectaron cambios para guardar.");
-      this.loading.set(false);
-      return;
-    }
+    // Email
+    if (formValues.email && formValues.email.trim() !== safeString(this.currentUser.email)) {
+      updates.email = formValues.email;
+    }
 
-    // 💡 Nota: Usamos this.currentUser.cc en lugar de this.currentUser.id para la actualización,
-    // lo cual coincide con la estructura de tu backend si está diseñada para usar CC como ID de ruta.
-    this.profileService.updateProfile(this.currentUser.cc, updates).subscribe({
-      next: () => {
-        this.loading.set(false);
-        this.successMessage.set('Perfil actualizado correctamente.');
+    // Nombre de Usuario
+    if (formValues.username && formValues.username.trim() !== safeString(this.currentUser.username)) {
+      updates.username = formValues.username;
+    }
 
-        // Sincronizar el modelo local y limpiar el formulario
-        if (this.currentUser) {
-          // Clonamos el usuario actual y aplicamos las actualizaciones
-          this.currentUser = { ...this.currentUser, ...updates };
-          // Limpiamos el campo de contraseña
-          this.profileForm.get('password')?.reset();
-          // Esto asegura que la validación se reinicie
-          this.profileForm.markAsPristine();
-        }
-      },
-      error: (err) => {
-        console.error('Error de actualización:', err);
-        this.loading.set(false);
-        this.errorMessage.set('Error al actualizar el perfil. Revise la consola para más detalles.');
-      }
-    });
-  }
+    // Contraseña
+    if (formValues.password && formValues.password.trim() !== '') {
+      updates.password = formValues.password;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      this.successMessage.set("No se detectaron cambios para guardar.");
+      this.loading.set(false);
+      return;
+    }
+
+    // ... (resto de la lógica de suscripción)
+  }
 }
